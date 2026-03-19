@@ -1,0 +1,36 @@
+{
+  "totalValue": 3485000,
+  "stocksShare": 74,
+  "cashShare": 26,
+  "monthlyIncome": 42350,
+  "positions": [
+    {
+      "ticker": "SBER",
+      "issuer": "Sberbank",
+      "allocation": 22,
+      "result": 16.2,
+      "strategy": "базовый российский core"
+    },
+    {
+      "ticker": "LKOH",
+      "issuer": "Lukoil",
+      "allocation": 19,
+      "result": 12.1,
+      "strategy": "дивидендный якорь"
+    },
+    {
+      "ticker": "YDEX",
+      "issuer": "Yandex",
+      "allocation": 17,
+      "result": 8.5,
+      "strategy": "рост цифрового сегмента"
+    },
+    {
+      "ticker": "T",
+      "issuer": "T-Technologies",
+      "allocation": 16,
+      "result": 9.3,
+      "strategy": "финтех и розница"
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+:root {
+  font-family: "Manrope", "Segoe UI", sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #10201b;
+  background:
+    radial-gradient(
+      circle at top left,
+      rgba(176, 224, 200, 0.65),
+      transparent 30%
+    ),
+    linear-gradient(180deg, #f7faf7 0%, #eef4ef 100%);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  --surface-strong: #14342d;
+  --surface-soft: #edf6f2;
+  --surface-card: rgba(255, 255, 255, 0.82);
+  --border-soft: rgba(16, 32, 27, 0.08);
+  --text-soft: #52625d;
+  --accent-primary: #11795f;
+  --accent-secondary: #db8d30;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  min-width: 320px;
+}
+
+body {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+.glass-panel {
+  background: var(--surface-card);
+  border: 1px solid var(--border-soft);
+  box-shadow: 0 30px 80px rgba(24, 51, 45, 0.12);
+  backdrop-filter: blur(18px);
+}
+
+.app-root,
+.ant-app,
+.app-frame {
+  height: 100%;
+}

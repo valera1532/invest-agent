@@ -36,4 +36,14 @@ If PowerShell blocks `pnpm.ps1`, use `pnpm.cmd` instead of `pnpm`.
 
 ## Backend Env
 
-Create `apps/api/.env` from `apps/api/.env.example` and fill in `TINKOFF_TOKEN` before calling Tinkoff endpoints.
+Create `apps/api/.env` from `apps/api/.env.example` and fill in database and auth secrets. T-Bank tokens are now connected by each user from the application UI and are no longer stored in `.env`.
+
+## PostgreSQL
+
+```bash
+pnpm db:up
+pnpm db:push
+pnpm db:generate
+```
+
+The default local connection is `postgresql://postgres:postgres@localhost:5432/invest_agent`.

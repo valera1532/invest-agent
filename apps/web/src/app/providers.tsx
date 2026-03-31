@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { PropsWithChildren } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { App as AntApp, ConfigProvider } from "antd";
+import { Toaster } from "sonner";
+import { registerSessionExpiredHandler } from "@/features/auth/lib/session-events";
 
 export function AppProviders({ children }: PropsWithChildren) {
   const [queryClient] = useState(
@@ -17,26 +18,21 @@ export function AppProviders({ children }: PropsWithChildren) {
       }),
   );
 
+  useEffect(() => {
+    return registerSessionExpiredHandler(() => {
+      queryClient.setQueryData(["auth-me"], null);
+      queryClient.removeQueries({ queryKey: ["dashboard-overview"] });
+      queryClient.removeQueries({ queryKey: ["portfolio-snapshot"] });
+      queryClient.removeQueries({ queryKey: ["market-highlights"] });
+    });
+  }, [queryClient]);
+
   return (
-    <ConfigProvider
-      theme={{
-        token: {
-          colorPrimary: "#11795f",
-          colorInfo: "#11795f",
-          colorSuccess: "#1e8b68",
-          colorWarning: "#db8d30",
-          colorBgLayout: "#eef4ef",
-          colorBgContainer: "#ffffff",
-          borderRadius: 18,
-          fontFamily: '"Manrope", "Segoe UI", sans-serif',
-        },
-      }}
-    >
-      <AntApp className="app-frame">
-        <QueryClientProvider client={queryClient}>
-          {children}
-        </QueryClientProvider>
-      </AntApp>
-    </ConfigProvider>
+    <QueryClientProvider client={queryClient}>
+      <div className="app-frame">
+        {children}
+        <Toaster richColors position="top-right" />
+      </div>
+    </QueryClientProvider>
   );
 }

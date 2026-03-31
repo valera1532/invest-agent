@@ -1,15 +1,12 @@
 import type { Request, Response } from "express";
-import { env } from "@/config/env";
-
 export function getHealthController(_request: Request, response: Response) {
   response.json({ ok: true, ts: Date.now() });
 }
 
 export function getEnvController(_request: Request, response: Response) {
   response.json({
-    sandbox: env.tinkoffSandbox,
     ts: Date.now(),
-    version: "v2",
+    version: "v3",
   });
 }
 
@@ -19,8 +16,16 @@ export function getRootController(_request: Request, response: Response) {
     message: "Invest Agent API is running",
     endpoints: [
       "/health",
+      "/api/auth/register",
+      "/api/auth/login",
+      "/api/auth/refresh",
+      "/api/auth/logout",
+      "/api/auth/me",
+      "/api/auth/tbank/connect",
       "/api/shares",
       "/api/shares/debug",
+      "/api/trading/shares",
+      "/api/trading/buy",
       "/api/portfolio",
       "/api/accounts",
       "/api/accounts/:id/margin",

@@ -1,23 +1,20 @@
 import { useEffect } from "react";
+import type { ReactNode } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, Controller } from "react-hook-form";
-import {
-  Button,
-  Card,
-  Col,
-  Input,
-  Row,
-  Select,
-  Space,
-  Switch,
-  Typography,
-  message,
-} from "antd";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import {
   settingsSchema,
   type SettingsSchema,
 } from "@/features/settings/schema";
 import { useUiStore } from "@/store/ui-store";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
+import { Textarea } from "@/components/ui/textarea";
 
 const riskOptions = [
   { label: "Консервативный", value: "conservative" },
@@ -45,145 +42,128 @@ export function SettingsPage() {
 
   const onSubmit = async (values: SettingsSchema) => {
     saveSettings(values);
-    message.success("Настройки сохранены локально");
+    toast.success("Настройки сохранены локально");
   };
 
   return (
-    <Row gutter={[16, 16]}>
-      <Col xs={24} xl={16}>
-        <Card className="rounded-[28px] border-0">
-          <Typography.Title level={4}>Профиль кабинета</Typography.Title>
-          <Space direction="vertical" size="large" className="w-full">
+    <div className="grid gap-6 xl:grid-cols-[1.6fr_1fr]">
+      <Card>
+        <CardHeader>
+          <CardTitle>Профиль кабинета</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
             <Controller
               name="fullName"
               control={control}
               render={({ field }) => (
-                <div>
-                  <Typography.Text>Имя владельца</Typography.Text>
-                  <Input
-                    {...field}
-                    size="large"
-                    placeholder="Например, Valerii"
-                    className="mt-2"
-                  />
-                  {errors.fullName ? (
-                    <Typography.Text className="mt-2 block text-red-500">
-                      {errors.fullName.message}
-                    </Typography.Text>
-                  ) : null}
-                </div>
+                <Field label="Имя владельца" error={errors.fullName?.message}>
+                  <Input {...field} placeholder="Например, Valerii" />
+                </Field>
               )}
             />
-
             <Controller
               name="primaryGoal"
               control={control}
               render={({ field }) => (
-                <div>
-                  <Typography.Text>Главная цель</Typography.Text>
-                  <Input.TextArea {...field} rows={4} className="mt-2" />
-                  {errors.primaryGoal ? (
-                    <Typography.Text className="mt-2 block text-red-500">
-                      {errors.primaryGoal.message}
-                    </Typography.Text>
-                  ) : null}
-                </div>
+                <Field label="Главная цель" error={errors.primaryGoal?.message}>
+                  <Textarea {...field} rows={4} />
+                </Field>
               )}
             />
-
             <Controller
               name="riskProfile"
               control={control}
               render={({ field }) => (
-                <div>
-                  <Typography.Text>Профиль риска</Typography.Text>
-                  <Select
-                    value={field.value}
-                    onChange={field.onChange}
-                    size="large"
-                    options={riskOptions}
-                    className="mt-2 w-full"
-                  />
-                </div>
+                <Field label="Профиль риска">
+                  <Select value={field.value} onChange={field.onChange}>
+                    {riskOptions.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </Select>
+                </Field>
               )}
             />
-
             <Controller
               name="telegram"
               control={control}
               render={({ field }) => (
-                <div>
-                  <Typography.Text>Контакт</Typography.Text>
-                  <Input
-                    {...field}
-                    size="large"
-                    placeholder="@invest_agent_demo"
-                    className="mt-2"
-                  />
-                  {errors.telegram ? (
-                    <Typography.Text className="mt-2 block text-red-500">
-                      {errors.telegram.message}
-                    </Typography.Text>
-                  ) : null}
-                </div>
+                <Field label="Контакт" error={errors.telegram?.message}>
+                  <Input {...field} placeholder="@invest_agent_demo" />
+                </Field>
               )}
             />
-
             <Controller
               name="dailyDigest"
               control={control}
               render={({ field }) => (
                 <div className="flex items-center justify-between rounded-[24px] bg-[#f6faf7] px-5 py-4">
                   <div>
-                    <Typography.Text className="block font-medium">
+                    <div className="font-medium text-[#10201b]">
                       Ежедневный digest
-                    </Typography.Text>
-                    <Typography.Text type="secondary">
-                      Включить локальный флаг уведомлений для будущей
-                      интеграции.
-                    </Typography.Text>
+                    </div>
+                    <div className="text-sm text-[#52625d]">
+                      Локальный флаг уведомлений для будущей интеграции.
+                    </div>
                   </div>
-                  <Switch checked={field.value} onChange={field.onChange} />
+                  <Switch
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
                 </div>
               )}
             />
-
-            <Space>
-              <Button
-                type="primary"
-                size="large"
-                loading={isSubmitting}
-                onClick={handleSubmit(onSubmit)}
-              >
+            <div className="flex flex-wrap gap-3">
+              <Button type="submit" size="lg" loading={isSubmitting}>
                 Сохранить
               </Button>
               <Button
-                size="large"
+                type="button"
+                variant="outline"
+                size="lg"
                 disabled={!isDirty}
                 onClick={() => reset(settings)}
               >
                 Сбросить
               </Button>
-            </Space>
-          </Space>
-        </Card>
-      </Col>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
 
-      <Col xs={24} xl={8}>
-        <Card className="rounded-[28px] border-0 bg-[#fffaf2]">
-          <Typography.Text className="text-[11px] uppercase tracking-[0.28em] text-[#8b6b2d]">
+      <Card className="bg-[#fffaf2]">
+        <CardHeader>
+          <div className="text-[11px] uppercase tracking-[0.28em] text-[#8b6b2d]">
             local store
-          </Typography.Text>
-          <Typography.Title level={4} className="!mt-2">
-            Что хранится в Zustand
-          </Typography.Title>
-          <div className="space-y-3 text-sm leading-7 text-[#5d5646]">
-            <div>- состояние сайдбара</div>
-            <div>- локальные настройки пользователя</div>
-            <div>- база для следующих UI-предпочтений и feature flags</div>
           </div>
-        </Card>
-      </Col>
-    </Row>
+          <CardTitle>Что хранится в Zustand</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-3 text-sm leading-7 text-[#5d5646]">
+          <div>- состояние сайдбара</div>
+          <div>- локальные настройки пользователя</div>
+          <div>- база для следующих UI-предпочтений и feature flags</div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+function Field({
+  label,
+  error,
+  children,
+}: {
+  label: string;
+  error?: string;
+  children: ReactNode;
+}) {
+  return (
+    <div className="space-y-2">
+      <Label>{label}</Label>
+      {children}
+      {error ? <p className="text-sm text-[#b84d4d]">{error}</p> : null}
+    </div>
   );
 }

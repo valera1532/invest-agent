@@ -1,20 +1,12 @@
-import { TinkoffInvestApi } from "tinkoff-invest-api";
-import { env } from "@/config/env";
 import { HttpError } from "@/lib/http-error";
+import { createTinkoffApi } from "@/integrations/tinkoff/tinkoff.factory";
 
-if (!env.TINKOFF_TOKEN) {
-  console.warn("[api] TINKOFF_TOKEN is empty. Tinkoff endpoints will return 500 until the token is set.");
-}
-
-export const tinkoffApi = new TinkoffInvestApi({
-  token: env.TINKOFF_TOKEN,
-});
-
-export async function ensureAccountId(preferredAccountId?: string) {
+export async function ensureAccountId(token: string, preferredAccountId?: string) {
   if (preferredAccountId) {
     return preferredAccountId;
   }
 
+  const tinkoffApi = createTinkoffApi(token);
   const { accounts } = await tinkoffApi.users.getAccounts({});
   const accountId = accounts?.[0]?.id;
 

@@ -1,5 +1,11 @@
 import type { ReactNode } from "react";
-import { Alert, Skeleton } from "antd";
+import {
+  Alert,
+  AlertDescription,
+  AlertIcon,
+  AlertTitle,
+} from "@/components/ui/alert";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type QueryStateProps = {
   isLoading: boolean;
@@ -9,16 +15,24 @@ type QueryStateProps = {
 
 export function QueryState({ isLoading, error, children }: QueryStateProps) {
   if (isLoading) {
-    return <Skeleton active paragraph={{ rows: 6 }} />;
+    return (
+      <div className="space-y-3">
+        <Skeleton className="h-28 w-full" />
+        <Skeleton className="h-20 w-full" />
+        <Skeleton className="h-64 w-full" />
+      </div>
+    );
   }
 
   if (error) {
     return (
-      <Alert
-        type="error"
-        message="Не удалось загрузить данные"
-        description={error.message}
-      />
+      <Alert>
+        <AlertIcon />
+        <div>
+          <AlertTitle>Не удалось загрузить данные</AlertTitle>
+          <AlertDescription>{error.message}</AlertDescription>
+        </div>
+      </Alert>
     );
   }
 

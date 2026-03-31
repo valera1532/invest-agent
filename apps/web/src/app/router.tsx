@@ -4,9 +4,13 @@ import {
   createRouter,
   redirect,
 } from "@tanstack/react-router";
-import { Typography } from "antd";
 import { NotFoundPage, RootComponent } from "./router-views";
-import { AppShell } from "@/components/app-shell";
+import { ConnectTokenGuard } from "@/features/auth/components/connect-token-guard";
+import { GuestOnly } from "@/features/auth/components/guest-only";
+import { ProtectedApp } from "@/features/auth/components/protected-app";
+import { AuthLoginPage } from "@/pages/auth-login-page";
+import { AuthRegisterPage } from "@/pages/auth-register-page";
+import { ConnectTokenPage } from "@/pages/connect-token-page";
 import { DashboardPage } from "@/pages/dashboard-page";
 import { LandingPage } from "@/pages/landing-page";
 import { PortfolioPage } from "@/pages/portfolio-page";
@@ -27,7 +31,37 @@ const landingRoute = createRoute({
 const appRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: "/app",
-  component: AppShell,
+  component: ProtectedApp,
+});
+
+const authRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/auth",
+  component: GuestOnly,
+});
+
+const connectTokenRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: "/auth/connect-token",
+  component: ConnectTokenGuard,
+});
+
+const loginRoute = createRoute({
+  getParentRoute: () => authRoute,
+  path: "login",
+  component: AuthLoginPage,
+});
+
+const registerRoute = createRoute({
+  getParentRoute: () => authRoute,
+  path: "register",
+  component: AuthRegisterPage,
+});
+
+const connectTokenIndexRoute = createRoute({
+  getParentRoute: () => connectTokenRoute,
+  path: "/",
+  component: ConnectTokenPage,
 });
 
 const appIndexRoute = createRoute({
@@ -72,6 +106,8 @@ const settingsRoute = createRoute({
 
 const routeTree = rootRoute.addChildren([
   landingRoute,
+  authRoute.addChildren([loginRoute, registerRoute]),
+  connectTokenRoute.addChildren([connectTokenIndexRoute]),
   appRoute.addChildren([
     appIndexRoute,
     overviewRoute,
@@ -87,7 +123,7 @@ export const router = createRouter({
   defaultPreload: "intent",
   defaultPendingComponent: () => (
     <div className="flex min-h-screen items-center justify-center">
-      <Typography.Text type="secondary">Загружаем интерфейс...</Typography.Text>
+      <p className="text-sm text-[#60716a]">Загружаем интерфейс...</p>
     </div>
   ),
 });

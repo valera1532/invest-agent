@@ -1,11 +1,51 @@
-import { tinkoffApi } from "@/integrations/tinkoff/tinkoff.client";
+import { createTinkoffApi } from "@/integrations/tinkoff/tinkoff.factory";
 import { moneyValueToNumber, timestampToIso } from "@/integrations/tinkoff/tinkoff.utils";
+import { createTtlCache } from "@/lib/cache";
 import type { AccountRow, CashRow, MarginAttributesDto, TariffDto } from "@/types/invest";
 
-export async function listAccounts(): Promise<AccountRow[]> {
+const accountsCache = createTtlCache<AccountRow[]>();
+const ACCOUNTS_CACHE_TTL_MS = 60_000;
+
+const accountTypeLabels: Record<string, string> = {
+  "1": "Брокерский счет",
+  "2": "ИИС",
+  "3": "Инвесткопилка",
+};
+
+const accountStatusLabels: Record<string, string> = {
+  "1": "Новый",
+  "2": "Открыт",
+  "3": "Закрыт",
+};
+
+function mapAccountType(value?: string) {
+  if (!value) {
+    return undefined;
+  }
+
+  return accountTypeLabels[value] ?? value;
+}
+
+function mapAccountStatus(value?: string) {
+  if (!value) {
+    return undefined;
+  }
+
+  return accountStatusLabels[value] ?? value;
+}
+
+export async function listAccounts(token: string): Promise<AccountRow[]> {
+  const cacheKey = token;
+  const cachedAccounts = accountsCache.get(cacheKey);
+
+  if (cachedAccounts) {
+    return cachedAccounts;
+  }
+
+  const tinkoffApi = createTinkoffApi(token);
   const { accounts } = await tinkoffApi.users.getAccounts({});
 
-  return (accounts || []).map((account: any) => {
+  const mappedAccounts = (accounts || []).map((account: any) => {
     const row: AccountRow = { id: String(account.id) };
 
     if (account.name) {
@@ -13,11 +53,17 @@ export async function listAccounts(): Promise<AccountRow[]> {
     }
 
     if (account.type != null) {
-      row.type = String(account.type);
+      const accountType = mapAccountType(String(account.type));
+      if (accountType) {
+        row.type = accountType;
+      }
     }
 
     if (account.status != null) {
-      row.status = String(account.status);
+      const accountStatus = mapAccountStatus(String(account.status));
+      if (accountStatus) {
+        row.status = accountStatus;
+      }
     }
 
     const openedDate = timestampToIso(account.openedDate);
@@ -32,9 +78,13 @@ export async function listAccounts(): Promise<AccountRow[]> {
 
     return row;
   });
+
+  accountsCache.set(cacheKey, mappedAccounts, ACCOUNTS_CACHE_TTL_MS);
+  return mappedAccounts;
 }
 
-export async function getMarginAttributes(accountId: string): Promise<MarginAttributesDto> {
+export async function getMarginAttributes(token: string, accountId: string): Promise<MarginAttributesDto> {
+  const tinkoffApi = createTinkoffApi(token);
   try {
     const response: any = await tinkoffApi.users.getMarginAttributes({ accountId });
 
@@ -67,6 +117,7 @@ export async function getMarginAttributes(accountId: string): Promise<MarginAttr
         accumulator.push({
           currency: String(item.currency || ""),
           amount,
+          accountId,
         });
       }
 
@@ -84,6 +135,7 @@ export async function getMarginAttributes(accountId: string): Promise<MarginAttr
   }
 }
 
-export async function getUserTariff(): Promise<TariffDto> {
+export async function getUserTariff(token: string): Promise<TariffDto> {
+  const tinkoffApi = createTinkoffApi(token);
   return (await tinkoffApi.users.getUserTariff({})) as unknown;
 }

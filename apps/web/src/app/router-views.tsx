@@ -1,6 +1,13 @@
 import { Link, Outlet } from "@tanstack/react-router";
-import { Button, Result, Space } from "antd";
 import { AppProviders } from "./providers";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 export function RootComponent() {
   return (
@@ -15,21 +22,22 @@ export function RootComponent() {
 export function NotFoundPage() {
   return (
     <div className="flex min-h-screen items-center justify-center p-6">
-      <Result
-        status="404"
-        title="Страница не найдена"
-        subTitle="Похоже, этот маршрут еще не описан в новом клиенте."
-        extra={
-          <Space>
-            <Link to="/">
-              <Button>На лендинг</Button>
-            </Link>
-            <Link to="/app/overview">
-              <Button type="primary">В кабинет</Button>
-            </Link>
-          </Space>
-        }
-      />
+      <Card className="max-w-lg text-center">
+        <CardHeader>
+          <CardTitle>Страница не найдена</CardTitle>
+          <CardDescription>
+            Похоже, этот маршрут еще не описан в новом клиенте.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="flex justify-center gap-3">
+          <Button asChild variant="outline">
+            <Link to="/">На лендинг</Link>
+          </Button>
+          <Button asChild>
+            <Link to="/app/overview">В кабинет</Link>
+          </Button>
+        </CardContent>
+      </Card>
     </div>
   );
 }

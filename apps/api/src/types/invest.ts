@@ -8,9 +8,32 @@ export type ShareRow = {
   lastPriceTime?: string;
 };
 
+export type ShareSearchRow = {
+  instrumentId: string;
+  ticker: string;
+  figi?: string;
+  name: string;
+  currency?: string;
+  lot: number;
+  lastPrice?: number;
+  lastPriceTime?: string;
+};
+
+export type BuyOrderResultDto = {
+  orderId: string;
+  executionStatus: string;
+  lotsRequested: number;
+  lotsExecuted: number;
+  instrumentUid: string;
+  message: string;
+  totalOrderAmount?: number;
+};
+
 export type CashRow = {
   currency: string;
   amount: number;
+  accountId?: string;
+  accountName?: string;
 };
 
 export type PositionRow = {
@@ -22,10 +45,15 @@ export type PositionRow = {
   quantity?: number;
   lastPrice?: number;
   lastPriceTime?: string;
+  currentValue?: number;
+  instrumentType?: string;
+  accountId?: string;
+  accountName?: string;
 };
 
 export type PortfolioDto = {
   accountId: string;
+  accounts: AccountRow[];
   cash: CashRow[];
   positions: PositionRow[];
 };

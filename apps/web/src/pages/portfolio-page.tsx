@@ -1,27 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
-import { Card, Col, Progress, Row, Table, Tag, Typography } from "antd";
-import type { ColumnsType } from "antd/es/table";
 import { QueryState } from "@/components/query-state";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { getPortfolioSnapshot } from "@/features/portfolio/api/get-portfolio-snapshot";
-import type { PortfolioSnapshot } from "@/features/portfolio/api/get-portfolio-snapshot";
-
-const columns: ColumnsType<PortfolioSnapshot["positions"][number]> = [
-  { title: "Тикер", dataIndex: "ticker" },
-  { title: "Эмитент", dataIndex: "issuer" },
-  {
-    title: "Доля",
-    dataIndex: "allocation",
-    render: (value: number) => `${value}%`,
-  },
-  {
-    title: "Результат",
-    dataIndex: "result",
-    render: (value: number) => (
-      <Tag color={value >= 0 ? "green" : "red"}>{value}%</Tag>
-    ),
-  },
-  { title: "Стратегия", dataIndex: "strategy" },
-];
 
 export function PortfolioPage() {
   const query = useQuery({
@@ -33,62 +21,155 @@ export function PortfolioPage() {
     <QueryState isLoading={query.isLoading} error={query.error}>
       {query.data ? (
         <div className="space-y-6">
-          <Row gutter={[16, 16]}>
-            <Col xs={24} md={8}>
-              <Card className="rounded-[28px] border-0">
-                <Typography.Text type="secondary">
-                  Общая стоимость
-                </Typography.Text>
-                <Typography.Title level={2} className="!mb-0 !mt-3">
-                  {query.data.totalValue.toLocaleString("ru-RU")} RUB
-                </Typography.Title>
-              </Card>
-            </Col>
-            <Col xs={24} md={8}>
-              <Card className="rounded-[28px] border-0 bg-[#f6faf7]">
-                <Typography.Text type="secondary">
-                  Месячный кэшфлоу
-                </Typography.Text>
-                <Typography.Title
-                  level={2}
-                  className="!mb-0 !mt-3 !text-[#11795f]"
-                >
-                  +{query.data.monthlyIncome.toLocaleString("ru-RU")} RUB
-                </Typography.Title>
-              </Card>
-            </Col>
-            <Col xs={24} md={8}>
-              <Card className="rounded-[28px] border-0 bg-[#fffaf2]">
-                <Typography.Text type="secondary">
-                  Структура капитала
-                </Typography.Text>
-                <div className="mt-4 space-y-3">
-                  <Progress
-                    percent={query.data.stocksShare}
-                    strokeColor="#11795f"
-                    trailColor="#e4efe8"
-                  />
-                  <Progress
-                    percent={query.data.cashShare}
-                    strokeColor="#db8d30"
-                    trailColor="#f3ead6"
-                  />
-                </div>
-              </Card>
-            </Col>
-          </Row>
-
-          <Card className="rounded-[28px] border-0">
-            <Typography.Title level={4}>Позиции портфеля</Typography.Title>
-            <Table
-              rowKey="ticker"
-              columns={columns}
-              dataSource={query.data.positions}
-              pagination={false}
+          <div className="grid gap-4 md:grid-cols-3">
+            <MetricCard
+              label="Общая стоимость"
+              value={`${query.data.totalValue.toLocaleString("ru-RU")} RUB`}
             />
-          </Card>
+            <MetricCard
+              label="Стоимость бумаг"
+              value={`${query.data.stocksValue.toLocaleString("ru-RU")} RUB`}
+              tone="green"
+            />
+            <MetricCard
+              label="Денежный остаток"
+              value={`${query.data.cashValue.toLocaleString("ru-RU")} RUB`}
+              tone="warm"
+              note={
+                query.data.accountId === "all"
+                  ? `Счетов в выборке: ${query.data.accounts.length}`
+                  : `Счет: ${query.data.accountId}`
+              }
+            />
+          </div>
+
+          <div className="grid gap-6 xl:grid-cols-[1.6fr_1fr]">
+            <Card>
+              <CardHeader>
+                <CardTitle>Позиции портфеля</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {query.data.positions.length > 0 ? (
+                  <div className="overflow-x-auto">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Тикер</TableHead>
+                          <TableHead>Эмитент</TableHead>
+                          <TableHead>Количество</TableHead>
+                          <TableHead>Цена</TableHead>
+                          <TableHead>Стоимость</TableHead>
+                          <TableHead>Инструмент</TableHead>
+                          <TableHead>Счет</TableHead>
+                          <TableHead>Валюта</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {query.data.positions.map((position) => (
+                          <TableRow
+                            key={`${position.ticker}-${position.accountName ?? "account"}`}
+                          >
+                            <TableCell className="font-medium">
+                              {position.ticker}
+                            </TableCell>
+                            <TableCell>{position.issuer}</TableCell>
+                            <TableCell>
+                              {position.quantity.toLocaleString("ru-RU")}
+                            </TableCell>
+                            <TableCell>
+                              {position.lastPrice != null
+                                ? `${position.lastPrice.toLocaleString("ru-RU")} ${position.currency ?? ""}`.trim()
+                                : "Нет данных"}
+                            </TableCell>
+                            <TableCell>
+                              {position.currentValue != null
+                                ? `${position.currentValue.toLocaleString("ru-RU")} ${position.currency ?? ""}`.trim()
+                                : "Нет данных"}
+                            </TableCell>
+                            <TableCell>
+                              {position.instrumentType ?? "-"}
+                            </TableCell>
+                            <TableCell>
+                              {position.accountName ?? "Без названия"}
+                            </TableCell>
+                            <TableCell>{position.currency ?? "-"}</TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                ) : (
+                  <EmptyState text="В портфеле нет инструментов по текущим счетам" />
+                )}
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Денежные остатки</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {query.data.cash.length > 0 ? (
+                    query.data.cash.map((item, index) => (
+                      <div
+                        key={`${item.currency}-${index}`}
+                        className="rounded-2xl bg-[#f6faf7] p-4"
+                      >
+                        <div className="font-semibold text-[#10201b]">
+                          {item.currency}
+                        </div>
+                        <div className="mt-1 text-sm text-[#52625d]">
+                          {item.amount.toLocaleString("ru-RU")}
+                        </div>
+                        <div className="mt-1 text-sm text-[#52625d]">
+                          {item.accountName ?? "Без названия счета"}
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <EmptyState text="Денежные остатки отсутствуют" />
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
       ) : null}
     </QueryState>
+  );
+}
+
+function MetricCard({
+  label,
+  value,
+  note,
+  tone = "default",
+}: {
+  label: string;
+  value: string;
+  note?: string;
+  tone?: "default" | "green" | "warm";
+}) {
+  const toneClasses = {
+    default: "bg-white",
+    green: "bg-[#f6faf7]",
+    warm: "bg-[#fffaf2]",
+  };
+
+  return (
+    <Card className={toneClasses[tone]}>
+      <div className="text-sm text-[#60716a]">{label}</div>
+      <div className="mt-3 text-3xl font-semibold text-[#10201b]">{value}</div>
+      {note ? <div className="mt-3 text-sm text-[#60716a]">{note}</div> : null}
+    </Card>
+  );
+}
+
+function EmptyState({ text }: { text: string }) {
+  return (
+    <div className="rounded-2xl border border-dashed border-black/10 px-4 py-8 text-center text-sm text-[#60716a]">
+      {text}
+    </div>
   );
 }

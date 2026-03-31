@@ -1,12 +1,14 @@
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import { env } from "@/config/env";
 import { HttpError } from "@/lib/http-error";
 
-export function errorMiddleware(error: unknown, _request: Request, response: Response) {
+export function errorMiddleware(error: unknown, _request: Request, response: Response, _next: NextFunction) {
+  void _next;
+
   if (error instanceof Error && error.message.includes("UNAUTHENTICATED")) {
     response.status(401).json({
       error: "Tinkoff authentication failed",
-      message: "TINKOFF_TOKEN is missing, expired, or invalid.",
+      message: "T-Bank token is missing, expired, or invalid.",
       details: env.isProduction ? undefined : error.message,
     });
     return;

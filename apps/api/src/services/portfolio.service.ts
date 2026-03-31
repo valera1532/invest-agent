@@ -1,10 +1,9 @@
 import { LastPriceType } from "tinkoff-invest-api/cjs/generated/marketdata";
-import { ensureAccountId, tinkoffApi } from "@/integrations/tinkoff/tinkoff.client";
+import { createTinkoffApi } from "@/integrations/tinkoff/tinkoff.factory";
 import { moneyValueToNumber, quotationToNumber, timestampToIso } from "@/integrations/tinkoff/tinkoff.utils";
+import { listAccounts } from "@/services/accounts.service";
 import { fetchInstrumentMetaByUids } from "@/services/shares.service";
 import type { CashRow, PortfolioDto, PositionRow } from "@/types/invest";
-
-const ALLOWED_INSTRUMENT_TYPES = new Set<any>(["share", "etf", 2, 4]);
 
 type PositionDraft = {
   figi?: string | undefined;
@@ -15,6 +14,10 @@ type PositionDraft = {
   quantity?: number | undefined;
   lastPrice?: number | undefined;
   lastPriceTime?: string | undefined;
+  currentValue?: number | undefined;
+  instrumentType?: string | undefined;
+  accountId?: string | undefined;
+  accountName?: string | undefined;
 };
 
 function compactPosition(row: PositionDraft) {
@@ -27,34 +30,77 @@ function compactPosition(row: PositionDraft) {
     ...(row.quantity != null ? { quantity: row.quantity } : {}),
     ...(row.lastPrice != null ? { lastPrice: row.lastPrice } : {}),
     ...(row.lastPriceTime ? { lastPriceTime: row.lastPriceTime } : {}),
+    ...(row.currentValue != null ? { currentValue: row.currentValue } : {}),
+    ...(row.instrumentType ? { instrumentType: row.instrumentType } : {}),
+    ...(row.accountId ? { accountId: row.accountId } : {}),
+    ...(row.accountName ? { accountName: row.accountName } : {}),
   } satisfies PositionRow;
 }
 
-export async function getPortfolio(accountId?: string): Promise<PortfolioDto> {
-  const resolvedAccountId = await ensureAccountId(accountId);
+export async function getPortfolio(token: string, accountId?: string): Promise<PortfolioDto> {
+  const tinkoffApi = createTinkoffApi(token);
+  const accounts = await listAccounts(token);
+  const selectedAccounts = accountId ? accounts.filter((account) => account.id === accountId) : accounts;
 
-  const [positionsResponse, portfolioResponse] = await Promise.all([
-    tinkoffApi.operations.getPositions({ accountId: resolvedAccountId }),
-    tinkoffApi.operations.getPortfolio({ accountId: resolvedAccountId }),
-  ]);
+  if (selectedAccounts.length === 0) {
+    return {
+      accountId: accountId ?? "all",
+      accounts: [],
+      cash: [],
+      positions: [],
+    };
+  }
 
-  const cash = (positionsResponse.money || []).reduce((accumulator: CashRow[], item: any) => {
-    const amount = moneyValueToNumber(item);
-    if (amount != null) {
-      accumulator.push({
-        currency: String(item.currency || ""),
-        amount,
-      });
-    }
+  const accountPortfolios = await Promise.all(
+    selectedAccounts.map(async (account) => {
+      const [positionsResponse, portfolioResponse] = await Promise.all([
+        tinkoffApi.operations.getPositions({ accountId: account.id }),
+        tinkoffApi.operations.getPortfolio({ accountId: account.id }),
+      ]);
 
-    return accumulator;
-  }, []);
+      return {
+        account,
+        positionsResponse,
+        portfolioResponse,
+      };
+    }),
+  );
 
-  const rawPositions = (portfolioResponse.positions || []) as any[];
-  const uids = rawPositions.map((position) => position.instrumentUid || position.uid).filter(Boolean) as string[];
+  const cash = accountPortfolios.flatMap(({ account, positionsResponse }) =>
+    (positionsResponse.money || []).reduce((accumulator: CashRow[], item: any) => {
+      const amount = moneyValueToNumber(item);
+      if (amount != null) {
+        accumulator.push({
+          currency: String(item.currency || ""),
+          amount,
+          accountId: account.id,
+          ...(account.name ? { accountName: account.name } : {}),
+        });
+      }
+
+      return accumulator;
+    }, []),
+  );
+
+  const rawPositions = accountPortfolios.flatMap(({ account, portfolioResponse }) =>
+    ((portfolioResponse.positions || []) as any[]).map((position) => ({
+      account,
+      position,
+    })),
+  );
+  const uids = rawPositions.map(({ position }) => position.instrumentUid || position.uid).filter(Boolean) as string[];
+
+  if (uids.length === 0) {
+    return {
+      accountId: accountId ?? "all",
+      accounts: selectedAccounts,
+      cash,
+      positions: [],
+    };
+  }
 
   const [instrumentMeta, lastPricesResponse] = await Promise.all([
-    fetchInstrumentMetaByUids(uids),
+    fetchInstrumentMetaByUids(token, uids),
     tinkoffApi.marketdata.getLastPrices({
       instrumentId: uids,
       figi: [],
@@ -66,12 +112,12 @@ export async function getPortfolio(accountId?: string): Promise<PortfolioDto> {
     (lastPricesResponse.lastPrices || []).map((lastPrice: any) => [lastPrice.instrumentUid, lastPrice]),
   );
 
-  const positions = rawPositions
-    .map((position): PositionRow => {
+  const positions = rawPositions.map(({ account, position }): PositionRow => {
       const uid = position.instrumentUid || position.uid;
       const meta = instrumentMeta.get(uid) || {};
       const lastPrice = lastPriceByUid.get(uid);
       const quantity = quotationToNumber(position.quantity);
+      const normalizedLastPrice = quotationToNumber(lastPrice?.price);
       const currency = meta.currency || (position.averagePositionPrice?.currency as string | undefined) || undefined;
 
       return compactPosition({
@@ -81,23 +127,22 @@ export async function getPortfolio(accountId?: string): Promise<PortfolioDto> {
         name: meta.name,
         currency,
         quantity,
-        lastPrice: quotationToNumber(lastPrice?.price),
+        lastPrice: normalizedLastPrice,
         lastPriceTime: timestampToIso(lastPrice?.time),
+        currentValue:
+          quantity != null && normalizedLastPrice != null
+            ? Number((quantity * normalizedLastPrice).toFixed(2))
+            : undefined,
+        instrumentType:
+          typeof meta.instrumentType === "string" ? meta.instrumentType.toLowerCase() : undefined,
+        accountId: account.id,
+        accountName: account.name,
       });
-    })
-    .filter((position) => {
-      const meta = instrumentMeta.get(position.instrumentUid || "");
-      if (meta?.instrumentType == null) {
-        return true;
-      }
-
-      const normalizedType =
-        typeof meta.instrumentType === "string" ? meta.instrumentType.toLowerCase() : meta.instrumentType;
-      return ALLOWED_INSTRUMENT_TYPES.has(normalizedType);
     });
 
   return {
-    accountId: resolvedAccountId,
+    accountId: accountId ?? "all",
+    accounts: selectedAccounts,
     cash,
     positions,
   };

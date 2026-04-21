@@ -2,11 +2,13 @@ import type { Request, Response } from "express";
 import {
   accountParamsSchema,
   buyShareSchema,
+  dashboardOverviewQuerySchema,
   portfolioQuerySchema,
   sharesQuerySchema,
   shareSearchQuerySchema,
 } from "@/schemas/market.schemas";
 import { getMarginAttributes, getUserTariff, listAccounts } from "@/services/accounts.service";
+import { getDashboardOverview } from "@/services/dashboard.service";
 import { getFxRates } from "@/integrations/cbr/fx.client";
 import { getPortfolio } from "@/services/portfolio.service";
 import { getSharesWithLastPrices } from "@/services/shares.service";
@@ -67,6 +69,13 @@ export async function getAccountsController(request: Request, response: Response
   const token = await resolveUserToken(request);
   const accounts = await listAccounts(token);
   response.json(accounts);
+}
+
+export async function getDashboardOverviewController(request: Request, response: Response) {
+  const token = await resolveUserToken(request);
+  const query = dashboardOverviewQuerySchema.parse(request.query);
+  const overview = await getDashboardOverview(token, query);
+  response.json(overview);
 }
 
 export async function getAccountMarginController(request: Request, response: Response) {

@@ -5,7 +5,7 @@ export const sharesQuerySchema = z.object({
 });
 
 export const shareSearchQuerySchema = z.object({
-  query: z.string().trim().min(2).max(50),
+  query: z.string().trim().max(50).optional().default(""),
   limit: z.coerce.number().int().positive().max(50).optional(),
 });
 
@@ -21,4 +21,10 @@ export const buyShareSchema = z.object({
   accountId: z.string().min(1),
   instrumentId: z.string().min(1),
   quantity: z.coerce.number().int().positive().max(1_000),
+});
+
+export const dashboardOverviewQuerySchema = z.object({
+  historyPeriod: z.enum(["week", "month", "year"]).optional().default("month"),
+  page: z.coerce.number().int().positive().optional().default(1),
+  pageSize: z.coerce.number().int().positive().max(50).optional().default(10),
 });

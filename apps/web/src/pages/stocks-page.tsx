@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import axios from "axios";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Search } from "lucide-react";
 import { toast } from "sonner";
@@ -30,6 +31,7 @@ export function StocksPage() {
   const [accountId, setAccountId] = useState("");
   const [quantity, setQuantity] = useState(1);
   const queryClient = useQueryClient();
+  const normalizedCatalogQuery = catalogQuery.trim();
 
   const query = useQuery({
     queryKey: ["market-highlights"],
@@ -40,9 +42,8 @@ export function StocksPage() {
     queryFn: getBrokerageAccounts,
   });
   const shareCatalogQuery = useQuery({
-    queryKey: ["trading-shares", catalogQuery],
-    queryFn: () => searchTradingShares(catalogQuery),
-    enabled: catalogQuery.trim().length >= 2,
+    queryKey: ["trading-shares", normalizedCatalogQuery],
+    queryFn: () => searchTradingShares(normalizedCatalogQuery, 50),
   });
 
   const buyMutation = useMutation({
@@ -55,7 +56,13 @@ export function StocksPage() {
         queryClient.invalidateQueries({ queryKey: ["dashboard-overview"] }),
       ]);
     },
-    onError: () => toast.error("Не удалось выставить заявку на покупку"),
+    onError: (error) =>
+      toast.error(
+        resolveRequestErrorMessage(
+          error,
+          "Не удалось выставить заявку на покупку",
+        ),
+      ),
   });
 
   const filteredData = useMemo(() => {
@@ -88,7 +95,7 @@ export function StocksPage() {
 
   return (
     <QueryState isLoading={query.isLoading} error={query.error}>
-      <div className="flex flex-1 flex-col gap-6">
+      <div className="flex min-h-0 flex-1 flex-col gap-6">
         <div className="grid gap-4 md:grid-cols-3">
           <MetricCard label="Лидер списка" value={leader?.ticker ?? "-"} />
           <MetricCard
@@ -110,12 +117,12 @@ export function StocksPage() {
           />
         </div>
 
-        <div className="grid gap-6 xl:grid-cols-[1.6fr_1fr]">
-          <Card>
+        <div className="grid gap-6 xl:min-h-0 xl:grid-cols-[1.6fr_1fr]">
+          <Card className="xl:flex xl:min-h-0 xl:flex-col">
             <CardHeader>
               <CardTitle>Покупка акций</CardTitle>
             </CardHeader>
-            <CardContent>
+            <CardContent className="xl:flex xl:min-h-0 xl:flex-1 xl:flex-col">
               <div className="mb-5 flex flex-col gap-3 md:flex-row">
                 <div className="relative flex-1">
                   <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#60716a]" />
@@ -135,15 +142,13 @@ export function StocksPage() {
                 </Button>
               </div>
 
-              {catalogQuery.trim().length < 2 ? (
-                <EmptyState text="Введи минимум 2 символа, чтобы найти доступные акции для покупки" />
-              ) : (
-                <QueryState
-                  isLoading={shareCatalogQuery.isLoading}
-                  error={shareCatalogQuery.error as Error | null}
-                >
-                  {shareCatalogQuery.data?.length ? (
-                    <div className="overflow-x-auto">
+              <QueryState
+                isLoading={shareCatalogQuery.isLoading}
+                error={shareCatalogQuery.error as Error | null}
+              >
+                {shareCatalogQuery.data?.length ? (
+                  <div className="xl:min-h-0 xl:flex-1 xl:overflow-hidden">
+                    <div className="app-scrollbar overflow-x-auto xl:h-full xl:overflow-y-auto">
                       <Table>
                         <TableHeader>
                           <TableRow>
@@ -188,11 +193,17 @@ export function StocksPage() {
                         </TableBody>
                       </Table>
                     </div>
-                  ) : (
-                    <EmptyState text="По этому запросу T-Bank не вернул акции для торговли" />
-                  )}
-                </QueryState>
-              )}
+                  </div>
+                ) : (
+                  <EmptyState
+                    text={
+                      normalizedCatalogQuery
+                        ? "По этому запросу T-Bank не вернул акции для торговли"
+                        : "T-Bank не вернул доступные акции для покупки"
+                    }
+                  />
+                )}
+              </QueryState>
             </CardContent>
           </Card>
 
@@ -340,6 +351,17 @@ export function StocksPage() {
       </div>
     </QueryState>
   );
+}
+
+function resolveRequestErrorMessage(error: unknown, fallback: string) {
+  if (!axios.isAxiosError(error)) {
+    return fallback;
+  }
+
+  const payload = error.response?.data as
+    | { error?: string; message?: string }
+    | undefined;
+  return payload?.error || payload?.message || fallback;
 }
 
 function MetricCard({

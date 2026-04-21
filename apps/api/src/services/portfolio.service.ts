@@ -112,15 +112,34 @@ export async function getPortfolio(token: string, accountId?: string): Promise<P
     (lastPricesResponse.lastPrices || []).map((lastPrice: any) => [lastPrice.instrumentUid, lastPrice]),
   );
 
-  const positions = rawPositions.map(({ account, position }): PositionRow => {
+  const positions = rawPositions.flatMap(({ account, position }): PositionRow[] => {
       const uid = position.instrumentUid || position.uid;
       const meta = instrumentMeta.get(uid) || {};
+      const instrumentType = typeof meta.instrumentType === "string" ? meta.instrumentType.toLowerCase() : undefined;
+
+      if (instrumentType === "currency") {
+        return [];
+      }
+
       const lastPrice = lastPriceByUid.get(uid);
       const quantity = quotationToNumber(position.quantity);
-      const normalizedLastPrice = quotationToNumber(lastPrice?.price);
+      const portfolioCurrentPrice = moneyValueToNumber(position.currentPrice);
+      const marketLastPrice = quotationToNumber(lastPrice?.price);
+      const normalizedLastPrice = portfolioCurrentPrice ?? marketLastPrice;
+      const currentNkd = moneyValueToNumber(position.currentNkd);
       const currency = meta.currency || (position.averagePositionPrice?.currency as string | undefined) || undefined;
+      const isBond = instrumentType === "bond";
+      const currentValue =
+        quantity != null && normalizedLastPrice != null
+          ? Number(
+              (
+                quantity * normalizedLastPrice +
+                (isBond && currentNkd != null ? quantity * currentNkd : 0)
+              ).toFixed(2),
+            )
+          : undefined;
 
-      return compactPosition({
+      return [compactPosition({
         figi: position.figi,
         instrumentUid: uid,
         ticker: meta.ticker,
@@ -129,15 +148,11 @@ export async function getPortfolio(token: string, accountId?: string): Promise<P
         quantity,
         lastPrice: normalizedLastPrice,
         lastPriceTime: timestampToIso(lastPrice?.time),
-        currentValue:
-          quantity != null && normalizedLastPrice != null
-            ? Number((quantity * normalizedLastPrice).toFixed(2))
-            : undefined,
-        instrumentType:
-          typeof meta.instrumentType === "string" ? meta.instrumentType.toLowerCase() : undefined,
+        currentValue,
+        instrumentType,
         accountId: account.id,
         accountName: account.name,
-      });
+      })];
     });
 
   return {

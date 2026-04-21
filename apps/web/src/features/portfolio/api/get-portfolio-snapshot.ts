@@ -26,6 +26,10 @@ export type PortfolioSnapshot = {
   }>;
 };
 
+type GetPortfolioSnapshotParams = {
+  accountId?: string;
+};
+
 type BackendPortfolio = {
   accountId: string;
   accounts: Array<{ id: string; name?: string }>;
@@ -42,8 +46,12 @@ type BackendPortfolio = {
   }>;
 };
 
-export async function getPortfolioSnapshot() {
-  const response = await apiClient.get<BackendPortfolio>("/api/portfolio");
+export async function getPortfolioSnapshot(
+  params: GetPortfolioSnapshotParams = {},
+) {
+  const response = await apiClient.get<BackendPortfolio>("/api/portfolio", {
+    params: params.accountId ? { accountId: params.accountId } : undefined,
+  });
   const portfolio = response.data;
   const stocksValue = portfolio.positions.reduce(
     (sum, position) => sum + (position.currentValue ?? 0),

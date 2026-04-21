@@ -12,6 +12,7 @@ import { AuthLoginPage } from "@/pages/auth-login-page";
 import { AuthRegisterPage } from "@/pages/auth-register-page";
 import { ConnectTokenPage } from "@/pages/connect-token-page";
 import { DashboardPage } from "@/pages/dashboard-page";
+import { AiPage } from "@/pages/ai-page";
 import { LandingPage } from "@/pages/landing-page";
 import { PortfolioPage } from "@/pages/portfolio-page";
 import { SettingsPage } from "@/pages/settings-page";
@@ -98,6 +99,12 @@ const portfolioRoute = createRoute({
   component: PortfolioPage,
 });
 
+const aiRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: "ai",
+  component: AiPage,
+});
+
 const settingsRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "settings",
@@ -114,6 +121,7 @@ const routeTree = rootRoute.addChildren([
     marketsRoute,
     stocksRoute,
     portfolioRoute,
+    aiRoute,
     settingsRoute,
   ]),
 ]);

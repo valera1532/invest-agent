@@ -29,6 +29,27 @@ pnpm.cmd install
 pnpm.cmd dev
 ```
 
+## Local Startup Order
+
+If PostgreSQL is not running yet, start the database first and apply the Prisma schema:
+
+```powershell
+cd C:\Users\valer\diplom
+docker compose up -d
+pnpm db:push
+pnpm --filter api db:generate
+pnpm --filter api dev
+pnpm --filter web dev -- --host 0.0.0.0
+```
+
+If Docker and the schema were already prepared before, only these commands are needed:
+
+```powershell
+cd C:\Users\valer\diplom
+pnpm --filter api dev
+pnpm --filter web dev -- --host 0.0.0.0
+```
+
 Frontend opens at `http://localhost:5173`.
 API runs at `http://localhost:3001`.
 

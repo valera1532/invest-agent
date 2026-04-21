@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { Button } from "@/components/ui/button";
 import { QueryState } from "@/components/query-state";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -12,15 +14,53 @@ import {
 import { getPortfolioSnapshot } from "@/features/portfolio/api/get-portfolio-snapshot";
 
 export function PortfolioPage() {
-  const query = useQuery({
-    queryKey: ["portfolio-snapshot"],
-    queryFn: getPortfolioSnapshot,
+  const [selectedAccountId, setSelectedAccountId] = useState<string>("all");
+  const accountsQuery = useQuery({
+    queryKey: ["portfolio-accounts"],
+    queryFn: () => getPortfolioSnapshot(),
+    staleTime: 60_000,
   });
+  const query = useQuery({
+    queryKey: ["portfolio-snapshot", selectedAccountId],
+    queryFn: () =>
+      getPortfolioSnapshot(
+        selectedAccountId === "all"
+          ? undefined
+          : { accountId: selectedAccountId },
+      ),
+  });
+  const visibleAccounts =
+    accountsQuery.data?.accounts ?? query.data?.accounts ?? [];
 
   return (
     <QueryState isLoading={query.isLoading} error={query.error}>
       {query.data ? (
         <div className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Счета портфеля</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex flex-wrap gap-3">
+                <AccountChip
+                  isActive={selectedAccountId === "all"}
+                  onClick={() => setSelectedAccountId("all")}
+                >
+                  Все счета
+                </AccountChip>
+                {visibleAccounts.map((account, index) => (
+                  <AccountChip
+                    key={account.id}
+                    isActive={selectedAccountId === account.id}
+                    onClick={() => setSelectedAccountId(account.id)}
+                  >
+                    {account.name?.trim() || `Брокерский счет ${index + 1}`}
+                  </AccountChip>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
           <div className="grid gap-4 md:grid-cols-3">
             <MetricCard
               label="Общая стоимость"
@@ -171,5 +211,30 @@ function EmptyState({ text }: { text: string }) {
     <div className="rounded-2xl border border-dashed border-black/10 px-4 py-8 text-center text-sm text-[#60716a]">
       {text}
     </div>
+  );
+}
+
+function AccountChip({
+  isActive,
+  onClick,
+  children,
+}: {
+  isActive: boolean;
+  onClick: () => void;
+  children: string;
+}) {
+  return (
+    <Button
+      type="button"
+      variant={isActive ? "default" : "outline"}
+      className={
+        isActive
+          ? "bg-[#17362f] hover:bg-[#143028]"
+          : "bg-white hover:bg-[#f6faf7]"
+      }
+      onClick={onClick}
+    >
+      {children}
+    </Button>
   );
 }

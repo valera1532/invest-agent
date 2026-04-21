@@ -14,8 +14,46 @@ model User {
   name            String
   createdAt       DateTime         @default(now())
   updatedAt       DateTime         @updatedAt
+  aiDecisions     AiDecision[]
+  aiPreviewJobs   AiPreviewJob[]
+  tradeExecutions TradeExecution[]
   sessions        Session[]
+  investorProfile InvestorProfile?
   tbankConnection TbankConnection?
+}
+
+enum RiskProfile {
+  CONSERVATIVE
+  BALANCED
+  GROWTH
+  AGGRESSIVE
+}
+
+enum AiExecutionMode {
+  MANUAL_APPROVAL
+  FULL_AUTO
+}
+
+enum AiDecisionStatus {
+  PROPOSED
+  APPROVED
+  REJECTED
+  EXECUTED
+  FAILED
+}
+
+enum TradeExecutionStatus {
+  PENDING
+  SUCCESS
+  FAILED
+  CANCELLED
+}
+
+enum AiPreviewJobStatus {
+  QUEUED
+  RUNNING
+  COMPLETED
+  FAILED
 }
 
 model Session {
@@ -42,4 +80,81 @@ model TbankConnection {
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model InvestorProfile {
+  id                 String      @id @default(cuid())
+  userId             String      @unique
+  primaryGoal        String      @default("Сформировать понятный инвестиционный портфель под цели пользователя")
+  riskProfile        RiskProfile @default(BALANCED)
+  telegram           String?
+  dailyDigest        Boolean     @default(true)
+  executionMode      AiExecutionMode @default(MANUAL_APPROVAL)
+  createdAt          DateTime    @default(now())
+  updatedAt          DateTime    @updatedAt
+  user               User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model AiDecision {
+  id              String           @id @default(cuid())
+  userId          String
+  accountId       String?
+  riskProfile     RiskProfile
+  executionMode   AiExecutionMode
+  status          AiDecisionStatus @default(PROPOSED)
+  summary         String
+  portfolioView   Json
+  actions         Json
+  futureBuyIdeas  Json?
+  warnings        Json
+  rejectedIdeas   Json
+  runtimeContext  Json
+  promptVersion   String           @default("v1")
+  approvalNote    String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tradeExecutions TradeExecution[]
+
+  @@index([userId, createdAt])
+  @@index([userId, status])
+}
+
+model TradeExecution {
+  id             String               @id @default(cuid())
+  aiDecisionId   String
+  userId         String
+  status         TradeExecutionStatus @default(PENDING)
+  actionType     String
+  instrumentId   String
+  accountId      String
+  lots           Int
+  brokerOrderId  String?
+  brokerResponse Json?
+  failureReason  String?
+  createdAt      DateTime             @default(now())
+  updatedAt      DateTime             @updatedAt
+  aiDecision     AiDecision           @relation(fields: [aiDecisionId], references: [id], onDelete: Cascade)
+  user           User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([aiDecisionId])
+  @@index([userId, createdAt])
+}
+
+model AiPreviewJob {
+  id           String             @id @default(cuid())
+  userId       String
+  accountId    String?
+  status       AiPreviewJobStatus @default(QUEUED)
+  stage        String?
+  errorMessage String?
+  decisionId   String?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  startedAt    DateTime?
+  finishedAt   DateTime?
+  user         User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
+  @@index([userId, status])
 }

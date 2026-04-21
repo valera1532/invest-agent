@@ -38,6 +38,7 @@ body,
 
 body {
   margin: 0;
+  overflow: hidden;
 }
 
 a {
@@ -63,4 +64,45 @@ textarea {
 .ant-app,
 .app-frame {
   height: 100%;
+}
+
+.app-screen {
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+}
+
+.app-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(17, 121, 95, 0.45) rgba(17, 121, 95, 0.08);
+}
+
+.app-scrollbar::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+.app-scrollbar::-webkit-scrollbar-track {
+  border-radius: 9999px;
+  background: rgba(17, 121, 95, 0.08);
+}
+
+.app-scrollbar::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 9999px;
+  background: linear-gradient(
+    180deg,
+    rgba(17, 121, 95, 0.7),
+    rgba(33, 70, 61, 0.82)
+  );
+  background-clip: padding-box;
+}
+
+.app-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(
+    180deg,
+    rgba(17, 121, 95, 0.9),
+    rgba(20, 52, 45, 0.95)
+  );
+  background-clip: padding-box;
 }

@@ -8,6 +8,7 @@ import {
 } from "@tanstack/react-router";
 import {
   BarChart3,
+  Bot,
   ChevronLeft,
   ChevronRight,
   Home,
@@ -37,6 +38,11 @@ const pageMeta: Record<string, { title: string; subtitle: string }> = {
     title: "Портфель",
     subtitle:
       "Реальные позиции, остатки и распределение по всем доступным счетам.",
+  },
+  "/app/ai": {
+    title: "AI-аналитик",
+    subtitle:
+      "Preview решений AI по multi-asset портфелю без автоматического исполнения.",
   },
   "/app/settings": {
     title: "Настройки",
@@ -72,6 +78,7 @@ export function AppShell() {
       { href: "/app/overview", label: "Обзор", icon: Home },
       { href: "/app/stocks", label: "Акции", icon: BarChart3 },
       { href: "/app/portfolio", label: "Портфель", icon: Wallet },
+      { href: "/app/ai", label: "AI", icon: Bot },
       { href: "/app/settings", label: "Настройки", icon: Settings2 },
     ],
     [],
@@ -172,10 +179,10 @@ export function AppShell() {
   );
 
   return (
-    <div className="flex h-full min-h-full bg-transparent">
+    <div className="app-screen flex bg-transparent">
       <aside
         className={cn(
-          "hidden border-r border-white/8 lg:block",
+          "hidden h-full border-r border-white/8 lg:block",
           sidebarCollapsed ? "w-24" : "w-72",
         )}
       >
@@ -193,7 +200,7 @@ export function AppShell() {
         </div>
       ) : null}
 
-      <div className="flex min-h-full flex-1 flex-col bg-transparent">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden bg-transparent">
         <header className="flex h-20 items-center justify-between border-b border-white/10 bg-[linear-gradient(135deg,#17362f_0%,#21463d_52%,#1a3b33_100%)] px-4 text-white md:px-8">
           <div className="flex items-center gap-3">
             <Button
@@ -234,8 +241,8 @@ export function AppShell() {
           </div>
         </header>
 
-        <main className="flex min-h-0 flex-1 p-4 md:p-8">
-          <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col">
+        <main className="app-scrollbar flex min-h-0 flex-1 overflow-y-auto p-4 md:p-8">
+          <div className="mx-auto flex min-h-full w-full max-w-7xl flex-1 flex-col">
             <Outlet />
           </div>
         </main>

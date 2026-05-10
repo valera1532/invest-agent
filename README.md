@@ -21,39 +21,55 @@ pnpm lint
 pnpm build
 ```
 
-## Windows Quick Start
+## Windows CMD Quick Start
 
-```powershell
+All commands below are intended for the regular Windows `cmd` terminal.
+
+1. Start Docker Desktop and wait until Docker is running.
+2. Open `cmd` in the project folder:
+
+```cmd
 cd C:\Users\valer\diplom
+```
+
+3. Install dependencies, if this is the first launch:
+
+```cmd
 pnpm.cmd install
-pnpm.cmd dev
 ```
 
-## Local Startup Order
+4. Start PostgreSQL in Docker:
 
-If PostgreSQL is not running yet, start the database first and apply the Prisma schema:
-
-```powershell
-cd C:\Users\valer\diplom
-docker compose up -d
-pnpm db:push
-pnpm --filter api db:generate
-pnpm --filter api dev
-pnpm --filter web dev -- --host 0.0.0.0
+```cmd
+pnpm.cmd db:up
 ```
 
-If Docker and the schema were already prepared before, only these commands are needed:
+5. Apply the Prisma schema and generate Prisma Client:
 
-```powershell
+```cmd
+pnpm.cmd db:push
+pnpm.cmd db:generate
+```
+
+6. Start the API in a separate `cmd` window:
+
+```cmd
 cd C:\Users\valer\diplom
-pnpm --filter api dev
-pnpm --filter web dev -- --host 0.0.0.0
+set AI_DAILY_REVIEW_ENABLED=false&& pnpm.cmd --filter api dev
+```
+
+7. Start the frontend in another separate `cmd` window:
+
+```cmd
+cd C:\Users\valer\diplom
+pnpm.cmd --filter web dev --host 0.0.0.0
 ```
 
 Frontend opens at `http://localhost:5173`.
 API runs at `http://localhost:3001`.
+API health check is available at `http://localhost:3001/health`.
 
-If PowerShell blocks `pnpm.ps1`, use `pnpm.cmd` instead of `pnpm`.
+For later launches, if dependencies and Prisma are already prepared, usually only steps 1, 4, 6, and 7 are needed.
 
 ## Backend Env
 

@@ -6,6 +6,7 @@ export type AuthProfile = {
   name: string;
   hasTbankToken: boolean;
   tbankTokenMasked: string | null;
+  hasCompletedInvestorQuiz: boolean;
 };
 
 export type RegisterPayload = {

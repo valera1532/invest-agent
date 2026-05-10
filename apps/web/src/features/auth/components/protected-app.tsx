@@ -28,6 +28,15 @@ export function ProtectedApp() {
       pathname !== "/auth/connect-token"
     ) {
       navigate({ to: "/auth/connect-token", replace: true });
+      return;
+    }
+
+    if (
+      meQuery.data?.hasTbankToken &&
+      !meQuery.data.hasCompletedInvestorQuiz &&
+      pathname !== "/app/investor-quiz"
+    ) {
+      navigate({ to: "/app/investor-quiz", replace: true });
     }
   }, [meQuery.data, meQuery.isError, navigate, pathname]);
 

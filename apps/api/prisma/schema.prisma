@@ -16,6 +16,7 @@ model User {
   updatedAt       DateTime         @updatedAt
   aiDecisions     AiDecision[]
   aiPreviewJobs   AiPreviewJob[]
+  investorQuestionnaire InvestorQuestionnaire?
   tradeExecutions TradeExecution[]
   sessions        Session[]
   investorProfile InvestorProfile?
@@ -56,6 +57,67 @@ enum AiPreviewJobStatus {
   FAILED
 }
 
+enum AgeRange {
+  AGE_18_24
+  AGE_25_34
+  AGE_35_44
+  AGE_45_54
+  AGE_55_PLUS
+}
+
+enum ExperienceLevel {
+  NONE
+  UP_TO_ONE_YEAR
+  ONE_TO_THREE_YEARS
+  THREE_PLUS_YEARS
+}
+
+enum InvestmentGoal {
+  CAPITAL_PRESERVATION
+  PASSIVE_INCOME
+  BALANCED_GROWTH
+  FAST_GROWTH
+}
+
+enum InvestmentHorizon {
+  LESS_THAN_ONE_YEAR
+  ONE_TO_THREE_YEARS
+  THREE_TO_FIVE_YEARS
+  FIVE_PLUS_YEARS
+}
+
+enum LiquidityNeed {
+  ANYTIME
+  WITHIN_ONE_YEAR
+  IN_SEVERAL_YEARS
+  LONG_TERM_ONLY
+}
+
+enum DrawdownTolerance {
+  UP_TO_10
+  UP_TO_20
+  UP_TO_30
+  OVER_30
+}
+
+enum DrawdownReaction {
+  REDUCE_POSITIONS
+  HOLD_AND_WAIT
+  BUY_MORE
+}
+
+enum RiskPriority {
+  PROTECT_CAPITAL
+  BALANCED_APPROACH
+  MAXIMIZE_GROWTH
+}
+
+enum AiReviewFrequency {
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
 model Session {
   id           String   @id @default(cuid())
   userId       String
@@ -90,9 +152,29 @@ model InvestorProfile {
   telegram           String?
   dailyDigest        Boolean     @default(true)
   executionMode      AiExecutionMode @default(MANUAL_APPROVAL)
+  aiReviewFrequency  AiReviewFrequency @default(DAILY)
   createdAt          DateTime    @default(now())
   updatedAt          DateTime    @updatedAt
   user               User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model InvestorQuestionnaire {
+  id                  String             @id @default(cuid())
+  userId              String             @unique
+  ageRange            AgeRange
+  experienceLevel     ExperienceLevel
+  investmentGoal      InvestmentGoal
+  investmentHorizon   InvestmentHorizon
+  liquidityNeed       LiquidityNeed
+  drawdownTolerance   DrawdownTolerance
+  drawdownReaction    DrawdownReaction
+  riskPriority        RiskPriority
+  monthlyContribution Int
+  aiReviewFrequency   AiReviewFrequency
+  completedAt         DateTime           @default(now())
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+  user                User               @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model AiDecision {

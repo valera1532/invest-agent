@@ -7,6 +7,7 @@ export const investorSettingsSchema = z.object({
   telegram: z.string().trim().min(2, "Добавь контакт для связи"),
   dailyDigest: z.boolean(),
   executionMode: z.enum(["manual_approval", "full_auto"]),
+  aiReviewFrequency: z.enum(["daily", "weekly", "monthly"]),
 });
 
 export type InvestorSettingsInput = z.infer<typeof investorSettingsSchema>;

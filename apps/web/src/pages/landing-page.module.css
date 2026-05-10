@@ -1,21 +1,163 @@
+.page {
+  position: relative;
+}
+
+.revealHeader,
+.revealPrimary,
+.revealSecondary,
+.revealCard,
+.revealItem {
+  opacity: 0;
+  animation: revealUp 0.72s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.revealPrimary,
+.revealSecondary,
+.revealCard,
+.revealItem,
+.headerShell {
+  transition:
+    transform 220ms ease,
+    box-shadow 220ms ease,
+    border-color 220ms ease,
+    background 220ms ease;
+}
+
+.revealHeader {
+  animation-delay: 0.05s;
+}
+
+.revealPrimary {
+  animation-delay: 0.14s;
+}
+
+.revealSecondary {
+  animation-delay: 0.24s;
+}
+
+.revealCard {
+  animation-delay: 0.2s;
+}
+
+.revealItem {
+  animation-delay: 0.32s;
+}
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(
+      circle at 10% 20%,
+      rgba(43, 147, 108, 0.34),
+      transparent 28%
+    ),
+    radial-gradient(
+      circle at 88% 16%,
+      rgba(65, 104, 214, 0.24),
+      transparent 26%
+    ),
+    radial-gradient(
+      circle at 72% 84%,
+      rgba(23, 176, 132, 0.28),
+      transparent 28%
+    ),
+    linear-gradient(
+      180deg,
+      #081b18 0%,
+      #0d2823 22%,
+      #11332c 46%,
+      #143f36 72%,
+      #0c2420 100%
+    );
+}
+
+.orbOne,
+.orbTwo {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(28px);
+  opacity: 0.92;
+}
+
+.orbOne {
+  top: -16%;
+  left: -10%;
+  height: 42rem;
+  width: 42rem;
+  background: radial-gradient(
+    circle,
+    rgba(48, 211, 156, 0.48),
+    rgba(48, 211, 156, 0.03) 62%
+  );
+  animation: driftOne 11s ease-in-out infinite alternate;
+}
+
+.orbTwo {
+  right: -12%;
+  bottom: -22%;
+  height: 38rem;
+  width: 38rem;
+  background: radial-gradient(
+    circle,
+    rgba(74, 132, 255, 0.34),
+    rgba(74, 132, 255, 0.03) 68%
+  );
+  animation: driftTwo 12s ease-in-out infinite alternate;
+}
+
+.backdrop::before {
+  content: "";
+  position: absolute;
+  inset: -12%;
+  background: conic-gradient(
+    from 90deg at 50% 50%,
+    rgba(43, 147, 108, 0.14),
+    rgba(47, 120, 196, 0.12),
+    rgba(17, 121, 95, 0.08),
+    rgba(43, 147, 108, 0.14)
+  );
+  mix-blend-mode: screen;
+  filter: blur(60px);
+  animation: pulseField 14s linear infinite;
+}
+
+.gridGlow {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(
+    circle at center,
+    rgba(0, 0, 0, 0.8),
+    transparent 80%
+  );
+  opacity: 0.35;
+}
+
 .heroGlow {
   position: absolute;
   inset: 0;
   background:
     radial-gradient(
-      circle at 20% 20%,
-      rgba(17, 121, 95, 0.28),
-      transparent 32%
-    ),
-    radial-gradient(
-      circle at 82% 18%,
-      rgba(219, 141, 48, 0.22),
+      circle at 18% 18%,
+      rgba(59, 194, 145, 0.18),
       transparent 26%
     ),
+    radial-gradient(
+      circle at 82% 24%,
+      rgba(88, 137, 255, 0.18),
+      transparent 22%
+    ),
     linear-gradient(
-      140deg,
-      rgba(255, 255, 255, 0.92),
-      rgba(255, 255, 255, 0.68)
+      160deg,
+      rgba(255, 255, 255, 0.08),
+      rgba(255, 255, 255, 0.01)
     );
 }
 
@@ -25,26 +167,307 @@
   grid-template-columns: repeat(12, minmax(0, 1fr));
 }
 
+.featuresGrid {
+  display: grid;
+  gap: 20px;
+}
+
+.insightGrid {
+  display: grid;
+  gap: 20px;
+}
+
 .heroPanel {
   grid-column: span 12;
   position: relative;
   overflow: hidden;
   border-radius: 32px;
+  background: linear-gradient(
+    180deg,
+    rgba(15, 51, 43, 0.82),
+    rgba(11, 36, 31, 0.9)
+  ) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 24px 80px rgba(6, 19, 15, 0.24);
+}
+
+.heroPanel:hover {
+  transform: translateY(-6px) scale(1.03);
+  border-color: rgba(158, 236, 201, 0.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 30px 90px rgba(6, 19, 15, 0.32);
+}
+
+.revealSecondary:hover,
+.revealCard:hover {
+  transform: translateY(-6px) scale(1.03);
+  border-color: rgba(158, 236, 201, 0.22);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 30px 90px rgba(6, 19, 15, 0.32);
 }
 
 .previewCard {
-  border: 1px solid rgba(16, 32, 27, 0.08);
   border-radius: 28px;
-  background: rgba(250, 252, 251, 0.88);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  background: linear-gradient(
+    180deg,
+    rgba(15, 51, 43, 0.84),
+    rgba(11, 36, 31, 0.9)
+  ) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 24px 80px rgba(6, 19, 15, 0.24);
+}
+
+.headerShell {
+  background: linear-gradient(
+    180deg,
+    rgba(13, 43, 37, 0.78),
+    rgba(8, 30, 26, 0.9)
+  ) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 24px 60px rgba(6, 19, 15, 0.22);
+}
+
+.headerShell:hover {
+  transform: translateY(-3px) scale(1.03);
+  border-color: rgba(158, 236, 201, 0.18) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 28px 68px rgba(6, 19, 15, 0.28);
+}
+
+.featureCard {
+  background: linear-gradient(
+    180deg,
+    rgba(14, 48, 40, 0.76),
+    rgba(10, 34, 29, 0.86)
+  ) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.featuresGrid .revealCard:nth-child(1) {
+  animation-delay: 0.18s;
+}
+
+.featuresGrid .revealCard:nth-child(2) {
+  animation-delay: 0.28s;
+}
+
+.featuresGrid .revealCard:nth-child(3) {
+  animation-delay: 0.38s;
+}
+
+.insightGrid .revealCard:nth-child(1) {
+  animation-delay: 0.18s;
+}
+
+.insightGrid .revealCard:nth-child(2) {
+  animation-delay: 0.3s;
+}
+
+.infoCard {
+  background: linear-gradient(
+    180deg,
+    rgba(13, 43, 37, 0.76),
+    rgba(10, 31, 28, 0.86)
+  ) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.darkInsightCard {
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(88, 137, 255, 0.12),
+      transparent 30%
+    ),
+    linear-gradient(180deg, rgba(13, 44, 38, 0.95), rgba(8, 24, 22, 0.98)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.infoTile {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.05),
+    rgba(255, 255, 255, 0.03)
+  ) !important;
+  backdrop-filter: blur(16px);
+}
+
+.infoTile:hover,
+.revealItem:hover {
+  transform: translateY(-4px) scale(1.03);
+  border-color: rgba(168, 228, 255, 0.18);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.09),
+    rgba(255, 255, 255, 0.05)
+  ) !important;
+  box-shadow: 0 20px 48px rgba(7, 22, 18, 0.2);
+}
+
+.metricMint {
+  background: linear-gradient(
+    180deg,
+    rgba(25, 111, 86, 0.58),
+    rgba(19, 79, 63, 0.74)
+  );
+}
+
+.metricTeal {
+  background: linear-gradient(
+    180deg,
+    rgba(20, 90, 95, 0.58),
+    rgba(16, 65, 70, 0.76)
+  );
+}
+
+.metricBlue {
+  background: linear-gradient(
+    180deg,
+    rgba(36, 74, 129, 0.54),
+    rgba(22, 51, 95, 0.76)
+  );
+}
+
+.metricGraphite {
+  background: linear-gradient(
+    180deg,
+    rgba(42, 53, 65, 0.62),
+    rgba(24, 30, 39, 0.82)
+  );
+}
+
+.ctaButton {
+  color: #fff !important;
+  background: linear-gradient(
+    135deg,
+    #179f79 0%,
+    #0e7258 55%,
+    #0a5845 100%
+  ) !important;
+  box-shadow:
+    0 18px 45px rgba(13, 101, 77, 0.34),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+}
+
+.ctaButton:hover {
+  transform: translateY(-1px);
+  background: linear-gradient(
+    135deg,
+    #1bc18f 0%,
+    #0f8768 55%,
+    #0b6851 100%
+  ) !important;
+  box-shadow:
+    0 22px 54px rgba(13, 101, 77, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+}
+
+.secondaryButton {
+  color: #eaf7f1 !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+  background: rgba(255, 255, 255, 0.06) !important;
+  backdrop-filter: blur(16px);
+}
+
+.secondaryButton:hover {
+  transform: translateY(-1px);
+  color: #fff !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  background: rgba(255, 255, 255, 0.12) !important;
+}
+
+@keyframes driftOne {
+  from {
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+  to {
+    transform: translate3d(16%, 10%, 0) scale(1.18) rotate(6deg);
+  }
+}
+
+@keyframes driftTwo {
+  from {
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+  to {
+    transform: translate3d(-14%, -16%, 0) scale(1.22) rotate(-7deg);
+  }
+}
+
+@keyframes pulseField {
+  from {
+    transform: rotate(0deg) scale(1);
+    opacity: 0.6;
+  }
+  50% {
+    transform: rotate(180deg) scale(1.06);
+    opacity: 0.9;
+  }
+  to {
+    transform: rotate(360deg) scale(1);
+    opacity: 0.6;
+  }
+}
+
+@keyframes revealUp {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbOne,
+  .orbTwo,
+  .backdrop::before,
+  .revealHeader,
+  .revealPrimary,
+  .revealSecondary,
+  .revealCard,
+  .revealItem {
+    animation: none;
+    opacity: 1;
+  }
+
+  .revealPrimary,
+  .revealSecondary,
+  .revealCard,
+  .revealItem,
+  .headerShell,
+  .heroPanel,
+  .infoTile {
+    transition: none;
+  }
 }
 
 @media (min-width: 1024px) {
   .heroPanel:first-child {
-    grid-column: span 7;
+    grid-column: span 8;
   }
 
   .heroPanel:last-child {
-    grid-column: span 5;
+    grid-column: span 4;
+  }
+
+  .insightGrid {
+    grid-template-columns: 1.2fr 0.8fr;
+  }
+}
+
+@media (min-width: 768px) {
+  .featuresGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }

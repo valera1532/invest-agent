@@ -30,6 +30,7 @@ export function getRootController(_request: Request, response: Response) {
       "/api/portfolio",
       "/api/accounts",
       "/api/settings",
+      "/api/investor-questionnaire",
       "/api/ai/decisions",
       "/api/ai/decisions/preview",
       "/api/ai/preview-jobs",

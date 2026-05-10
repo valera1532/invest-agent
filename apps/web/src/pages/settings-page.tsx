@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import type { ReactNode } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Link } from "@tanstack/react-router";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { QueryState } from "@/components/query-state";
@@ -28,6 +29,12 @@ const riskOptions = [
   { label: "Агрессивный", value: "aggressive" },
 ];
 
+const reviewFrequencyOptions = [
+  { label: "Каждый день", value: "daily" },
+  { label: "Раз в неделю", value: "weekly" },
+  { label: "Раз в месяц", value: "monthly" },
+];
+
 const defaultSettings: SettingsSchema = {
   fullName: "Valerii Investor",
   primaryGoal:
@@ -36,6 +43,7 @@ const defaultSettings: SettingsSchema = {
   telegram: "@invest_agent_demo",
   dailyDigest: true,
   executionMode: "manual_approval",
+  aiReviewFrequency: "daily",
 };
 
 export function SettingsPage() {
@@ -154,6 +162,21 @@ export function SettingsPage() {
                 )}
               />
               <Controller
+                name="aiReviewFrequency"
+                control={control}
+                render={({ field }) => (
+                  <Field label="Как часто AI пересматривает портфель?">
+                    <Select value={field.value} onChange={field.onChange}>
+                      {reviewFrequencyOptions.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </Select>
+                  </Field>
+                )}
+              />
+              <Controller
                 name="executionMode"
                 control={control}
                 render={({ field }) => (
@@ -198,6 +221,11 @@ export function SettingsPage() {
                 >
                   Сбросить
                 </Button>
+                <Link to="/app/investor-quiz">
+                  <Button type="button" variant="outline" size="lg">
+                    Перепройти инвест-квиз
+                  </Button>
+                </Link>
               </div>
             </form>
           </CardContent>

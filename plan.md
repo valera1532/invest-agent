@@ -361,6 +361,11 @@ Expected result:
 - AI gets structured external context instead of noisy text
 - research influences ranking and confidence, not execution safety
 
+Prompt integration note:
+
+- add normalized analytics of popular investors and institutional broker research into AI prompt only through the external research layer
+- do not inject raw article text directly into the prompt
+
 ## Suggested Next Implementation Step
 
 Recommended immediate next task:

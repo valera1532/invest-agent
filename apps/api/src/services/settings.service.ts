@@ -1,4 +1,4 @@
-import { AiExecutionMode, RiskProfile } from "@prisma/client";
+import { AiExecutionMode, AiReviewFrequency, RiskProfile } from "@prisma/client";
 import { HttpError } from "@/lib/http-error";
 import { prisma } from "@/lib/prisma";
 import type { InvestorSettingsInput } from "@/schemas/settings.schemas";
@@ -47,6 +47,28 @@ function mapExecutionModeToDb(value: InvestorSettingsInput["executionMode"]): Ai
   }
 }
 
+function mapAiReviewFrequencyToClient(value: AiReviewFrequency): InvestorSettingsInput["aiReviewFrequency"] {
+  switch (value) {
+    case AiReviewFrequency.DAILY:
+      return "daily";
+    case AiReviewFrequency.WEEKLY:
+      return "weekly";
+    case AiReviewFrequency.MONTHLY:
+      return "monthly";
+  }
+}
+
+function mapAiReviewFrequencyToDb(value: InvestorSettingsInput["aiReviewFrequency"]): AiReviewFrequency {
+  switch (value) {
+    case "daily":
+      return AiReviewFrequency.DAILY;
+    case "weekly":
+      return AiReviewFrequency.WEEKLY;
+    case "monthly":
+      return AiReviewFrequency.MONTHLY;
+  }
+}
+
 export async function getInvestorSettings(userId: string): Promise<InvestorSettingsInput> {
   const user = await prisma.user.findUnique({
     where: { id: userId },
@@ -68,6 +90,9 @@ export async function getInvestorSettings(userId: string): Promise<InvestorSetti
     executionMode: mapExecutionModeToClient(
       user.investorProfile?.executionMode ?? AiExecutionMode.MANUAL_APPROVAL,
     ),
+    aiReviewFrequency: mapAiReviewFrequencyToClient(
+      user.investorProfile?.aiReviewFrequency ?? AiReviewFrequency.DAILY,
+    ),
   };
 }
 
@@ -84,6 +109,7 @@ export async function updateInvestorSettings(userId: string, input: InvestorSett
             telegram: input.telegram,
             dailyDigest: input.dailyDigest,
             executionMode: mapExecutionModeToDb(input.executionMode),
+            aiReviewFrequency: mapAiReviewFrequencyToDb(input.aiReviewFrequency),
           },
           update: {
             primaryGoal: input.primaryGoal,
@@ -91,6 +117,7 @@ export async function updateInvestorSettings(userId: string, input: InvestorSett
             telegram: input.telegram,
             dailyDigest: input.dailyDigest,
             executionMode: mapExecutionModeToDb(input.executionMode),
+            aiReviewFrequency: mapAiReviewFrequencyToDb(input.aiReviewFrequency),
           },
         },
       },
@@ -106,6 +133,9 @@ export async function updateInvestorSettings(userId: string, input: InvestorSett
     dailyDigest: updated.investorProfile?.dailyDigest ?? input.dailyDigest,
     executionMode: mapExecutionModeToClient(
       updated.investorProfile?.executionMode ?? mapExecutionModeToDb(input.executionMode),
+    ),
+    aiReviewFrequency: mapAiReviewFrequencyToClient(
+      updated.investorProfile?.aiReviewFrequency ?? mapAiReviewFrequencyToDb(input.aiReviewFrequency),
     ),
   };
 }

@@ -27,7 +27,12 @@ export async function registerController(request: Request, response: Response) {
   const accessToken = signAccessToken(user);
 
   setAuthCookies(response, accessToken, refreshToken);
-  response.status(201).json({ user, hasTbankToken: false, tbankTokenMasked: null });
+  response.status(201).json({
+    ...user,
+    hasTbankToken: false,
+    tbankTokenMasked: null,
+    hasCompletedInvestorQuiz: false,
+  });
 }
 
 export async function loginController(request: Request, response: Response) {

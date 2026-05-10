@@ -1,4 +1,4 @@
-import { AiDecisionStatus, AiExecutionMode, Prisma, RiskProfile, TradeExecutionStatus } from "@prisma/client";
+import { AiDecisionStatus, AiExecutionMode, AiReviewFrequency, Prisma, RiskProfile, TradeExecutionStatus } from "@prisma/client";
 import { HttpError } from "@/lib/http-error";
 import { prisma } from "@/lib/prisma";
 import { getUserTbankToken } from "@/services/tbank-connection.service";
@@ -288,6 +288,20 @@ export async function runDailyAiReviewForUser(userId: string) {
   const now = new Date();
   if (lastDecision && lastDecision.createdAt.toDateString() === now.toDateString()) {
     return null;
+  }
+
+  const reviewFrequency = user.investorProfile.aiReviewFrequency ?? AiReviewFrequency.DAILY;
+  if (lastDecision && reviewFrequency === AiReviewFrequency.WEEKLY) {
+    const diffMs = now.getTime() - lastDecision.createdAt.getTime();
+    if (diffMs < 7 * 24 * 60 * 60 * 1000) {
+      return null;
+    }
+  }
+  if (lastDecision && reviewFrequency === AiReviewFrequency.MONTHLY) {
+    const diffMs = now.getTime() - lastDecision.createdAt.getTime();
+    if (diffMs < 30 * 24 * 60 * 60 * 1000) {
+      return null;
+    }
   }
 
   const { previewAiDecision } = await import("@/services/ai-decision.service");

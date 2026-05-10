@@ -44,6 +44,11 @@ const pageMeta: Record<string, { title: string; subtitle: string }> = {
     subtitle:
       "Preview решений AI по multi-asset портфелю без автоматического исполнения.",
   },
+  "/app/investor-quiz": {
+    title: "Инвест-квиз",
+    subtitle:
+      "Подбираем рекомендуемую стратегию портфеля и частоту AI-review по вашему профилю.",
+  },
   "/app/settings": {
     title: "Настройки",
     subtitle: "Локальные предпочтения кабинета и режим работы пользователя.",

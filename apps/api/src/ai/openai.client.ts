@@ -11,12 +11,21 @@ const openAiProxyDispatcher = env.OPENAI_PROXY_URL
   ? new ProxyAgent({ uri: env.OPENAI_PROXY_URL })
   : undefined;
 
+function buildChatCompletionsUrl() {
+  const baseUrl = new URL(env.OPENAI_BASE_URL);
+  if (baseUrl.pathname === "/") {
+    baseUrl.pathname = "/v1";
+  }
+
+  return `${baseUrl.toString().replace(/\/+$/, "")}/chat/completions`;
+}
+
 export async function createJsonChatCompletion(messages: OpenAiMessage[]) {
   if (!env.OPENAI_API_KEY) {
     throw new HttpError(400, "OPENAI_API_KEY is not configured on the backend");
   }
 
-  const response = await undiciFetch("https://api.openai.com/v1/chat/completions", {
+  const response = await undiciFetch(buildChatCompletionsUrl(), {
     method: "POST",
     ...(openAiProxyDispatcher ? { dispatcher: openAiProxyDispatcher } : {}),
     headers: {

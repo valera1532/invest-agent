@@ -116,7 +116,7 @@ export async function revokeRefreshSession(refreshToken?: string) {
 export async function getCurrentUser(userId: string) {
   const user = await prisma.user.findUnique({
     where: { id: userId },
-    include: { tbankConnection: true },
+    include: { tbankConnection: true, investorQuestionnaire: true },
   });
 
   if (!user) {
@@ -127,5 +127,6 @@ export async function getCurrentUser(userId: string) {
     ...mapUser(user),
     hasTbankToken: Boolean(user.tbankConnection),
     tbankTokenMasked: user.tbankConnection?.tokenMasked ?? null,
+    hasCompletedInvestorQuiz: Boolean(user.investorQuestionnaire),
   };
 }

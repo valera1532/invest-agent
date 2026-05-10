@@ -20,6 +20,10 @@ import {
   updateInvestorSettingsController,
 } from "@/controllers/settings.controller";
 import {
+  getInvestorQuestionnaireController,
+  saveInvestorQuestionnaireController,
+} from "@/controllers/investor-questionnaire.controller";
+import {
   approveAiDecisionController,
   createAiPreviewJobController,
   executeAiDecisionController,
@@ -43,6 +47,8 @@ marketRouter.get("/portfolio", asyncHandler(getPortfolioController));
 marketRouter.get("/accounts", asyncHandler(getAccountsController));
 marketRouter.get("/settings", asyncHandler(getInvestorSettingsController));
 marketRouter.put("/settings", asyncHandler(updateInvestorSettingsController));
+marketRouter.get("/investor-questionnaire", asyncHandler(getInvestorQuestionnaireController));
+marketRouter.put("/investor-questionnaire", asyncHandler(saveInvestorQuestionnaireController));
 marketRouter.get("/ai/decisions", asyncHandler(listAiDecisionsController));
 marketRouter.post("/ai/decisions/preview", asyncHandler(previewAiDecisionController));
 marketRouter.post("/ai/preview-jobs", asyncHandler(createAiPreviewJobController));

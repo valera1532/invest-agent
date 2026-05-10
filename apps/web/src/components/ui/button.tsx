@@ -5,11 +5,12 @@ import { LoaderCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 rounded-xl text-sm font-medium transition-colors disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#11795f]/50",
+  "inline-flex items-center justify-center gap-2 rounded-xl text-sm font-medium transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#11795f]/50",
   {
     variants: {
       variant: {
-        default: "bg-[#11795f] text-white hover:bg-[#0f6a53]",
+        default:
+          "bg-[linear-gradient(135deg,#179f79_0%,#0f7f61_56%,#0b684f_100%)] text-white shadow-[0_16px_40px_rgba(13,101,77,0.24)] hover:-translate-y-[1px] hover:bg-[linear-gradient(135deg,#1bc18f_0%,#0f9571_56%,#0c7458_100%)] hover:shadow-[0_20px_48px_rgba(13,101,77,0.32)]",
         secondary: "bg-[#e7efe9] text-[#17362f] hover:bg-[#dce7e1]",
         ghost: "bg-transparent text-inherit hover:bg-black/5",
         outline:

@@ -19,7 +19,12 @@ export function ConnectTokenGuard() {
     }
 
     if (meQuery.data?.hasTbankToken) {
-      navigate({ to: "/app/overview", replace: true });
+      navigate({
+        to: meQuery.data.hasCompletedInvestorQuiz
+          ? "/app/overview"
+          : "/app/investor-quiz",
+        replace: true,
+      });
     }
   }, [meQuery.data, meQuery.isError, navigate]);
 

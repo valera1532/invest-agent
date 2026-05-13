@@ -3,7 +3,7 @@ import { HttpError } from "@/lib/http-error";
 import { prisma } from "@/lib/prisma";
 import { getUserTbankToken } from "@/services/tbank-connection.service";
 import { placeMarketOrder } from "@/services/trading.service";
-import type { AiDecisionPreviewDto, AiDecisionRecordDto, AiDecisionListDto } from "@/types/ai";
+import type { AiDecisionPreviewDto, AiDecisionRecordDto, AiDecisionListDto, AiTradeExecutionDto } from "@/types/ai";
 
 type PersistAiDecisionInput = {
   userId: string;
@@ -51,6 +51,19 @@ function mapDecisionStatusToDto(value: AiDecisionStatus): AiDecisionRecordDto["s
   }
 }
 
+function mapTradeExecutionStatusToDto(value: TradeExecutionStatus): AiTradeExecutionDto["status"] {
+  switch (value) {
+    case TradeExecutionStatus.PENDING:
+      return "pending";
+    case TradeExecutionStatus.SUCCESS:
+      return "success";
+    case TradeExecutionStatus.FAILED:
+      return "failed";
+    case TradeExecutionStatus.CANCELLED:
+      return "cancelled";
+  }
+}
+
 function mapExecutionModeToDto(value: AiExecutionMode): AiDecisionRecordDto["executionMode"] {
   switch (value) {
     case AiExecutionMode.MANUAL_APPROVAL:
@@ -74,7 +87,32 @@ function toAiDecisionRecordDto(record: {
   createdAt: Date;
   updatedAt: Date;
   approvalNote: string | null;
+  tradeExecutions?: Array<{
+    id: string;
+    status: TradeExecutionStatus;
+    actionType: string;
+    instrumentId: string;
+    accountId: string;
+    lots: number;
+    brokerOrderId: string | null;
+    failureReason: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+  }>;
 }): AiDecisionRecordDto {
+  const tradeExecutions = record.tradeExecutions?.map((execution) => ({
+    id: execution.id,
+    status: mapTradeExecutionStatusToDto(execution.status),
+    actionType: execution.actionType,
+    instrumentId: execution.instrumentId,
+    accountId: execution.accountId,
+    lots: execution.lots,
+    ...(execution.brokerOrderId ? { brokerOrderId: execution.brokerOrderId } : {}),
+    ...(execution.failureReason ? { failureReason: execution.failureReason } : {}),
+    createdAt: execution.createdAt.toISOString(),
+    updatedAt: execution.updatedAt.toISOString(),
+  }));
+
   return {
     id: record.id,
     ...(record.accountId ? { accountId: record.accountId } : {}),
@@ -89,6 +127,7 @@ function toAiDecisionRecordDto(record: {
     createdAt: record.createdAt.toISOString(),
     updatedAt: record.updatedAt.toISOString(),
     ...(record.approvalNote ? { approvalNote: record.approvalNote } : {}),
+    ...(tradeExecutions ? { tradeExecutions } : {}),
   };
 }
 
@@ -123,6 +162,11 @@ export async function listAiDecisions(userId: string, page = 1, limit = 20): Pro
       orderBy: { createdAt: "desc" },
       skip: (safePage - 1) * safeLimit,
       take: safeLimit,
+      include: {
+        tradeExecutions: {
+          orderBy: { createdAt: "desc" },
+        },
+      },
     }),
   ]);
 
@@ -138,7 +182,14 @@ export async function listAiDecisions(userId: string, page = 1, limit = 20): Pro
 }
 
 async function getOwnedDecision(userId: string, id: string) {
-  const record = await prisma.aiDecision.findFirst({ where: { id, userId } });
+  const record = await prisma.aiDecision.findFirst({
+    where: { id, userId },
+    include: {
+      tradeExecutions: {
+        orderBy: { createdAt: "desc" },
+      },
+    },
+  });
   if (!record) {
     throw new HttpError(404, "AI decision not found");
   }
@@ -220,6 +271,8 @@ export async function executeAiDecision(userId: string, id: string) {
           failureReason,
         },
       });
+
+      break;
     }
   }
 
@@ -230,7 +283,8 @@ export async function executeAiDecision(userId: string, id: string) {
     },
   });
 
-  return toAiDecisionRecordDto(updated);
+  void updated;
+  return getAiDecisionRecordById(userId, id);
 }
 
 export async function approveAiDecision(userId: string, id: string, note?: string) {

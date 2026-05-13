@@ -5,9 +5,11 @@ import { buildMultiAssetUniverse, selectUniverseForRiskProfile } from "@/service
 import { persistAiDecision } from "@/services/ai-decision-records.service";
 import { getPortfolio } from "@/services/portfolio.service";
 import { getInvestorSettings } from "@/services/settings.service";
+import { buildBrokerResearchContext, type BrokerResearchCandidate } from "@/services/tbank-signals.service";
 import { createJsonChatCompletion } from "@/ai/openai.client";
 import {
   baseSystemPrompt,
+  brokerResearchPrompt,
   buildGoalPrompt,
   commonDecisionPrompt,
   executionPolicyPrompt,
@@ -87,6 +89,32 @@ function compactCashRows(portfolio: Awaited<ReturnType<typeof getPortfolio>>) {
   return [...portfolio.cash]
     .sort((left, right) => right.amount - left.amount)
     .slice(0, 10);
+}
+
+function buildBrokerResearchCandidates(
+  portfolio: Awaited<ReturnType<typeof getPortfolio>>,
+  selectedUniverse: Awaited<ReturnType<typeof buildMultiAssetUniverse>>,
+): BrokerResearchCandidate[] {
+  const portfolioCandidates = portfolio.positions.flatMap((position): BrokerResearchCandidate[] => {
+    if (!position.instrumentUid || !position.ticker) {
+      return [];
+    }
+
+    return [
+      {
+        instrumentId: position.instrumentUid,
+        ticker: position.ticker,
+        instrumentName: position.name || position.ticker,
+      },
+    ];
+  });
+  const universeCandidates = selectedUniverse.map((instrument) => ({
+    instrumentId: instrument.instrumentId,
+    ticker: instrument.ticker,
+    instrumentName: instrument.name,
+  }));
+
+  return [...portfolioCandidates, ...universeCandidates];
 }
 
 function compactDecisionActions(actions: unknown) {
@@ -194,6 +222,10 @@ export async function previewAiDecisionWithProgress(
   await onStage?.("building_universe");
   const universe = await buildMultiAssetUniverse(token);
   const selectedUniverse = selectUniverseForRiskProfile(universe, settings.riskProfile);
+  const brokerResearch = await buildBrokerResearchContext(
+    token,
+    buildBrokerResearchCandidates(portfolio, selectedUniverse),
+  );
 
   await onStage?.("preparing_context");
   const runtimeContext = {
@@ -216,6 +248,7 @@ export async function previewAiDecisionWithProgress(
       positions: compactPortfolioPositions(portfolio),
     },
     history,
+    brokerResearch,
     marketUniverse: selectedUniverse,
   };
 
@@ -226,6 +259,7 @@ export async function previewAiDecisionWithProgress(
       content: [
         baseSystemPrompt,
         commonDecisionPrompt,
+        brokerResearchPrompt,
         executionPolicyPrompt,
         buildGoalPrompt({ primaryGoal: settings.primaryGoal }),
         strategyOverlays[settings.riskProfile],
@@ -235,7 +269,7 @@ export async function previewAiDecisionWithProgress(
     },
     {
       role: "user",
-      content: `Investor decision context:\n${JSON.stringify(runtimeContext, null, 2)}`,
+      content: `Investor decision context json:\n${JSON.stringify(runtimeContext, null, 2)}`,
     },
   ]);
 

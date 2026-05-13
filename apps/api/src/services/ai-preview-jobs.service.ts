@@ -117,6 +117,19 @@ async function setJobFailed(id: string, errorMessage: string) {
   });
 }
 
+function formatJobError(error: unknown) {
+  if (error instanceof HttpError) {
+    const details = typeof error.details === "string" ? error.details : JSON.stringify(error.details);
+    return details ? `${error.message}: ${details.slice(0, 1000)}` : error.message;
+  }
+
+  if (error instanceof Error) {
+    return error.name === "AbortError" ? "OpenAI request timed out" : error.message;
+  }
+
+  return "AI preview job failed";
+}
+
 export async function processAiPreviewJob(id: string) {
   const job = await prisma.aiPreviewJob.findUnique({ where: { id } });
   if (!job) {
@@ -131,7 +144,6 @@ export async function processAiPreviewJob(id: string) {
     });
     await setJobCompleted(id, decision.id);
   } catch (error) {
-    const message = error instanceof Error ? error.message : "AI preview job failed";
-    await setJobFailed(id, message);
+    await setJobFailed(id, formatJobError(error));
   }
 }

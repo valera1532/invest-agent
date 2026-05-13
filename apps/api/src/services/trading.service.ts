@@ -49,8 +49,12 @@ function mapTradingError(error: unknown): never {
     });
   }
 
-  if (normalizedDetails.includes("trading is unavailable") || normalizedDetails.includes("market order is not available")) {
-    throw new HttpError(400, "Сейчас по этому инструменту нельзя выставить рыночную заявку", {
+  if (
+    normalizedDetails.includes("trading is unavailable") ||
+    normalizedDetails.includes("market order is not available") ||
+    normalizedDetails.includes("instrument is not available for trading")
+  ) {
+    throw new HttpError(400, "Сейчас по этому инструменту нельзя выставить заявку: торги закрыты или инструмент недоступен", {
       brokerMessage: details,
     });
   }

@@ -11,6 +11,35 @@ export type AiUniverseInstrument = {
   lastPriceTime?: string;
 };
 
+export type AiBrokerResearchDirection = "buy" | "sell";
+
+export type AiBrokerResearchSignal = {
+  instrumentId: string;
+  ticker: string;
+  instrumentName: string;
+  source: string;
+  direction: AiBrokerResearchDirection;
+  strategyType: "fundamental";
+  signalName: string;
+  targetPrice?: number;
+  probability?: number;
+  createdAt?: string;
+  expiresAt?: string;
+};
+
+export type AiBrokerResearchContext = {
+  fetchedAt: string;
+  sources: string[];
+  filters: {
+    strategyType: "fundamental";
+    active: "active";
+    maxSignalsPerInstrument: number;
+  };
+  signals: AiBrokerResearchSignal[];
+  missingActiveSignalsForTickers: string[];
+  unavailableReason?: string;
+};
+
 export type AiPortfolioView = {
   riskAlignment: "aligned" | "partially_aligned" | "misaligned";
   cashStatus: "underinvested" | "balanced" | "overexposed";
@@ -53,6 +82,19 @@ export type AiDecisionPreviewDto = {
 
 export type AiDecisionStatusDto = "proposed" | "approved" | "rejected" | "executed" | "failed";
 
+export type AiTradeExecutionDto = {
+  id: string;
+  status: "pending" | "success" | "failed" | "cancelled";
+  actionType: string;
+  instrumentId: string;
+  accountId: string;
+  lots: number;
+  brokerOrderId?: string;
+  failureReason?: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export type AiDecisionRecordDto = AiDecisionPreviewDto & {
   id: string;
   accountId?: string;
@@ -61,6 +103,7 @@ export type AiDecisionRecordDto = AiDecisionPreviewDto & {
   createdAt: string;
   updatedAt: string;
   approvalNote?: string;
+  tradeExecutions?: AiTradeExecutionDto[];
 };
 
 export type AiDecisionListDto = {

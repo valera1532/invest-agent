@@ -8,7 +8,7 @@ Frontend monorepo bootstrap for the renewed investment diploma project.
 - Express + TypeScript
 - TanStack Router + TanStack Query
 - Zustand
-- Ant Design + Tailwind CSS
+- Custom UI components + Tailwind CSS
 - React Hook Form + Zod
 - ESLint + Prettier + Husky + lint-staged
 
@@ -21,55 +21,82 @@ pnpm lint
 pnpm build
 ```
 
-## Windows CMD Quick Start
+## Быстрый запуск CMD
 
-All commands below are intended for the regular Windows `cmd` terminal.
+Все команды ниже рассчитаны на обычный Windows `cmd`, не на PowerShell.
 
-1. Start Docker Desktop and wait until Docker is running.
-2. Open `cmd` in the project folder:
+1. Запустить Docker Desktop:
+
+```cmd
+start "" "C:\Program Files\Docker\Docker\Docker Desktop.exe"
+```
+
+2. Дождаться запуска Docker и проверить, что он работает:
+
+```cmd
+docker info
+```
+
+3. Перейти в директорию проекта:
 
 ```cmd
 cd C:\Users\valer\diplom
 ```
 
-3. Install dependencies, if this is the first launch:
+4. Установить зависимости, если это первый запуск или папка `node_modules` была удалена:
 
 ```cmd
 pnpm.cmd install
 ```
 
-4. Start PostgreSQL in Docker:
+5. Поднять PostgreSQL в Docker:
 
 ```cmd
 pnpm.cmd db:up
 ```
 
-5. Apply the Prisma schema and generate Prisma Client:
+6. Применить Prisma-схему и сгенерировать Prisma Client:
 
 ```cmd
 pnpm.cmd db:push
 pnpm.cmd db:generate
 ```
 
-6. Start the API in a separate `cmd` window:
+7. Запустить API в отдельном окне `cmd`:
 
 ```cmd
 cd C:\Users\valer\diplom
-set AI_DAILY_REVIEW_ENABLED=false&& pnpm.cmd --filter api dev
+set AI_DAILY_REVIEW_ENABLED=false
+pnpm.cmd --filter api dev
 ```
 
-7. Start the frontend in another separate `cmd` window:
+8. Запустить web в другом отдельном окне `cmd`:
 
 ```cmd
 cd C:\Users\valer\diplom
 pnpm.cmd --filter web dev --host 0.0.0.0
 ```
 
-Frontend opens at `http://localhost:5173`.
-API runs at `http://localhost:3001`.
-API health check is available at `http://localhost:3001/health`.
+Открыть приложение: `http://localhost:5173`.
 
-For later launches, if dependencies and Prisma are already prepared, usually only steps 1, 4, 6, and 7 are needed.
+Проверить API: `http://localhost:3001/health`.
+
+Если проект уже подготовлен, обычно достаточно выполнить в первом `cmd`:
+
+```cmd
+start "" "C:\Program Files\Docker\Docker\Docker Desktop.exe"
+cd C:\Users\valer\diplom
+pnpm.cmd db:up
+set AI_DAILY_REVIEW_ENABLED=false
+pnpm.cmd --filter api dev
+```
+
+И во втором `cmd`:
+
+```cmd
+cd C:\Users\valer\diplom
+pnpm.cmd --filter web dev --host 0.0.0.0
+```
 
 ## Backend Env
 

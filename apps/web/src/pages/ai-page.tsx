@@ -58,6 +58,20 @@ const AI_JOB_STEPS = [
   "saving_decision",
 ] as const;
 
+function getExecutionFailureMessage(decision: AiDecisionRecord) {
+  const failedExecution = decision.tradeExecutions?.find(
+    (execution) => execution.status === "failed",
+  );
+
+  if (!failedExecution) {
+    return "Брокер отклонил исполнение одной или нескольких заявок.";
+  }
+
+  return failedExecution.failureReason
+    ? `${failedExecution.actionType.toUpperCase()} ${failedExecution.lots} лот(ов): ${failedExecution.failureReason}`
+    : `${failedExecution.actionType.toUpperCase()} ${failedExecution.lots} лот(ов): брокер отклонил заявку.`;
+}
+
 export function AiPage() {
   const queryClient = useQueryClient();
   const lastPreviewJobStatusRef = useRef<string | null>(null);
@@ -101,16 +115,29 @@ export function AiPage() {
   const approveMutation = useMutation({
     mutationFn: (id: string) => approveAiDecision(id),
     onSuccess: (result) => {
-      setDecision((current) => (current?.id === result.id ? result : current));
+      setDecision(null);
+      setActiveJobId(null);
       queryClient.invalidateQueries({ queryKey: ["ai-decisions"] });
-      toast.success("AI-решение подтверждено");
+      if (result.status === "failed") {
+        toast.error(
+          `Не удалось исполнить решение: ${getExecutionFailureMessage(result)}`,
+        );
+        return;
+      }
+
+      toast.success(
+        result.status === "executed"
+          ? "AI-решение подтверждено и исполнено"
+          : "AI-решение подтверждено",
+      );
     },
     onError: () => toast.error("Не удалось подтвердить AI-решение"),
   });
   const rejectMutation = useMutation({
     mutationFn: (id: string) => rejectAiDecision(id),
-    onSuccess: (result) => {
-      setDecision((current) => (current?.id === result.id ? result : current));
+    onSuccess: () => {
+      setDecision(null);
+      setActiveJobId(null);
       queryClient.invalidateQueries({ queryKey: ["ai-decisions"] });
       toast.success("AI-решение отклонено");
     },
@@ -120,8 +147,8 @@ export function AiPage() {
   const historyPageNumber = historyQuery.data?.page ?? 1;
   const historyTotalPages = historyQuery.data?.totalPages ?? 1;
   const activeDecision = useMemo(
-    () => decision ?? previewJobQuery.data?.decision ?? historyItems[0] ?? null,
-    [decision, previewJobQuery.data?.decision, historyItems],
+    () => decision ?? previewJobQuery.data?.decision ?? null,
+    [decision, previewJobQuery.data?.decision],
   );
   const activeJob = previewJobQuery.data;
   const loadingStageLabel = useMemo(() => {
@@ -299,6 +326,17 @@ export function AiPage() {
                     Отклонить решение
                   </Button>
                 </div>
+              ) : null}
+              {activeDecision.status === "failed" ? (
+                <Alert>
+                  <AlertIcon />
+                  <div>
+                    <AlertTitle>Исполнение не удалось</AlertTitle>
+                    <AlertDescription>
+                      {getExecutionFailureMessage(activeDecision)}
+                    </AlertDescription>
+                  </div>
+                </Alert>
               ) : null}
               {activeDecision.warnings.length ? (
                 <Alert>

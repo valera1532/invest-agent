@@ -10,6 +10,7 @@ type OpenAiMessage = {
 const openAiProxyDispatcher = env.OPENAI_PROXY_URL
   ? new ProxyAgent({ uri: env.OPENAI_PROXY_URL })
   : undefined;
+const OPENAI_REQUEST_TIMEOUT_MS = 120_000;
 
 function buildChatCompletionsUrl() {
   const baseUrl = new URL(env.OPENAI_BASE_URL);
@@ -24,9 +25,12 @@ export async function createJsonChatCompletion(messages: OpenAiMessage[]) {
   if (!env.OPENAI_API_KEY) {
     throw new HttpError(400, "OPENAI_API_KEY is not configured on the backend");
   }
+  const abortController = new AbortController();
+  const timeout = setTimeout(() => abortController.abort(), OPENAI_REQUEST_TIMEOUT_MS);
 
   const response = await undiciFetch(buildChatCompletionsUrl(), {
     method: "POST",
+    signal: abortController.signal,
     ...(openAiProxyDispatcher ? { dispatcher: openAiProxyDispatcher } : {}),
     headers: {
       "Content-Type": "application/json",
@@ -38,11 +42,11 @@ export async function createJsonChatCompletion(messages: OpenAiMessage[]) {
       response_format: { type: "json_object" },
       messages,
     }),
-  });
+  }).finally(() => clearTimeout(timeout));
 
   if (!response.ok) {
     const payload = await response.text();
-    throw new HttpError(502, "OpenAI request failed", payload);
+    throw new HttpError(502, `OpenAI request failed with status ${response.status}`, payload);
   }
 
   const payload = (await response.json()) as {

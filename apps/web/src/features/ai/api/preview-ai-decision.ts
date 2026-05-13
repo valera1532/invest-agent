@@ -8,6 +8,18 @@ export type AiDecisionPreview = {
   createdAt: string;
   updatedAt: string;
   approvalNote?: string;
+  tradeExecutions?: Array<{
+    id: string;
+    status: "pending" | "success" | "failed" | "cancelled";
+    actionType: string;
+    instrumentId: string;
+    accountId: string;
+    lots: number;
+    brokerOrderId?: string;
+    failureReason?: string;
+    createdAt: string;
+    updatedAt: string;
+  }>;
   summary: string;
   portfolioView: {
     riskAlignment: "aligned" | "partially_aligned" | "misaligned";

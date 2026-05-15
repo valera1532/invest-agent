@@ -10,7 +10,7 @@ type OpenAiMessage = {
 const openAiProxyDispatcher = env.OPENAI_PROXY_URL
   ? new ProxyAgent({ uri: env.OPENAI_PROXY_URL })
   : undefined;
-const OPENAI_REQUEST_TIMEOUT_MS = 120_000;
+const OPENAI_REQUEST_TIMEOUT_MS = 300_000;
 
 function buildChatCompletionsUrl() {
   const baseUrl = new URL(env.OPENAI_BASE_URL);

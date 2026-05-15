@@ -8,19 +8,22 @@ datasource db {
 }
 
 model User {
-  id              String           @id @default(cuid())
-  email           String           @unique
-  passwordHash    String
-  name            String
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  aiDecisions     AiDecision[]
-  aiPreviewJobs   AiPreviewJob[]
+  id                    String                 @id @default(cuid())
+  email                 String                 @unique
+  passwordHash          String
+  name                  String
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  aiDecisions           AiDecision[]
+  aiPreviewJobs         AiPreviewJob[]
+  auditLogs             AuditLog[]
+  brokerAccounts        BrokerAccount[]
   investorQuestionnaire InvestorQuestionnaire?
-  tradeExecutions TradeExecution[]
-  sessions        Session[]
-  investorProfile InvestorProfile?
-  tbankConnection TbankConnection?
+  portfolioSnapshots    PortfolioSnapshot[]
+  tradeExecutions       TradeExecution[]
+  sessions              Session[]
+  investorProfile       InvestorProfile?
+  tbankConnection       TbankConnection?
 }
 
 enum RiskProfile {
@@ -119,48 +122,48 @@ enum AiReviewFrequency {
 }
 
 model Session {
-  id           String   @id @default(cuid())
-  userId       String
-  tokenHash    String   @unique
-  userAgent    String?
-  ipAddress    String?
-  expiresAt    DateTime
-  createdAt    DateTime @default(now())
-  lastUsedAt   DateTime @default(now())
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id         String   @id @default(cuid())
+  userId     String
+  tokenHash  String   @unique
+  userAgent  String?
+  ipAddress  String?
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  lastUsedAt DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
 
 model TbankConnection {
-  id             String   @id @default(cuid())
-  userId         String   @unique
+  id             String    @id @default(cuid())
+  userId         String    @unique
   tokenEncrypted String
   tokenMasked    String
-  isValid        Boolean  @default(true)
+  isValid        Boolean   @default(true)
   lastCheckedAt  DateTime?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model InvestorProfile {
-  id                 String      @id @default(cuid())
-  userId             String      @unique
-  primaryGoal        String      @default("Сформировать понятный инвестиционный портфель под цели пользователя")
-  riskProfile        RiskProfile @default(BALANCED)
-  telegram           String?
-  dailyDigest        Boolean     @default(true)
-  executionMode      AiExecutionMode @default(MANUAL_APPROVAL)
-  aiReviewFrequency  AiReviewFrequency @default(DAILY)
-  createdAt          DateTime    @default(now())
-  updatedAt          DateTime    @updatedAt
-  user               User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                String            @id @default(cuid())
+  userId            String            @unique
+  primaryGoal       String            @default("Сформировать понятный инвестиционный портфель под цели пользователя")
+  riskProfile       RiskProfile       @default(BALANCED)
+  telegram          String?
+  dailyDigest       Boolean           @default(true)
+  executionMode     AiExecutionMode   @default(MANUAL_APPROVAL)
+  aiReviewFrequency AiReviewFrequency @default(DAILY)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model InvestorQuestionnaire {
-  id                  String             @id @default(cuid())
-  userId              String             @unique
+  id                  String            @id @default(cuid())
+  userId              String            @unique
   ageRange            AgeRange
   experienceLevel     ExperienceLevel
   investmentGoal      InvestmentGoal
@@ -171,19 +174,19 @@ model InvestorQuestionnaire {
   riskPriority        RiskPriority
   monthlyContribution Int
   aiReviewFrequency   AiReviewFrequency
-  completedAt         DateTime           @default(now())
-  createdAt           DateTime           @default(now())
-  updatedAt           DateTime           @updatedAt
-  user                User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  completedAt         DateTime          @default(now())
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+  user                User              @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model AiDecision {
-  id              String           @id @default(cuid())
+  id              String             @id @default(cuid())
   userId          String
   accountId       String?
   riskProfile     RiskProfile
   executionMode   AiExecutionMode
-  status          AiDecisionStatus @default(PROPOSED)
+  status          AiDecisionStatus   @default(PROPOSED)
   summary         String
   portfolioView   Json
   actions         Json
@@ -191,11 +194,12 @@ model AiDecision {
   warnings        Json
   rejectedIdeas   Json
   runtimeContext  Json
-  promptVersion   String           @default("v1")
+  promptVersion   String             @default("v1")
   approvalNote    String?
-  createdAt       DateTime         @default(now())
-  updatedAt       DateTime         @updatedAt
-  user            User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+  user            User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  decisionActions AiDecisionAction[]
   tradeExecutions TradeExecution[]
 
   @@index([userId, createdAt])
@@ -239,4 +243,121 @@ model AiPreviewJob {
 
   @@index([userId, createdAt])
   @@index([userId, status])
+}
+
+model Instrument {
+  id                String             @id @default(cuid())
+  instrumentUid     String             @unique
+  figi              String?            @unique
+  ticker            String
+  classCode         String?
+  name              String
+  type              String
+  currency          String
+  lot               Int?
+  countryOfRisk     String?
+  sector            String?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  aiDecisionActions AiDecisionAction[]
+  portfolioHoldings PortfolioHolding[]
+
+  @@index([ticker])
+  @@index([type])
+}
+
+model BrokerAccount {
+  id                 String              @id @default(cuid())
+  userId             String
+  externalAccountId  String
+  name               String?
+  type               String?
+  status             String?
+  openedAt           DateTime?
+  closedAt           DateTime?
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  portfolioSnapshots PortfolioSnapshot[]
+
+  @@unique([userId, externalAccountId])
+  @@index([userId])
+}
+
+model PortfolioSnapshot {
+  id                String             @id @default(cuid())
+  userId            String
+  brokerAccountId   String?
+  externalAccountId String?
+  totalValue        Decimal?           @db.Decimal(20, 6)
+  cashValue         Decimal?           @db.Decimal(20, 6)
+  currency          String             @default("rub")
+  capturedAt        DateTime           @default(now())
+  createdAt         DateTime           @default(now())
+  brokerAccount     BrokerAccount?     @relation(fields: [brokerAccountId], references: [id], onDelete: SetNull)
+  user              User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  holdings          PortfolioHolding[]
+
+  @@index([userId, capturedAt])
+  @@index([brokerAccountId, capturedAt])
+}
+
+model PortfolioHolding {
+  id                   String            @id @default(cuid())
+  snapshotId           String
+  instrumentId         String?
+  instrumentUid        String?
+  ticker               String?
+  name                 String
+  quantity             Decimal           @db.Decimal(24, 8)
+  averagePositionPrice Decimal?          @db.Decimal(20, 6)
+  currentPrice         Decimal?          @db.Decimal(20, 6)
+  expectedYield        Decimal?          @db.Decimal(20, 6)
+  currency             String            @default("rub")
+  createdAt            DateTime          @default(now())
+  instrument           Instrument?       @relation(fields: [instrumentId], references: [id], onDelete: SetNull)
+  snapshot             PortfolioSnapshot @relation(fields: [snapshotId], references: [id], onDelete: Cascade)
+
+  @@index([snapshotId])
+  @@index([instrumentId])
+  @@index([ticker])
+}
+
+model AiDecisionAction {
+  id            String      @id @default(cuid())
+  aiDecisionId  String
+  instrumentId  String?
+  instrumentUid String?
+  ticker        String?
+  actionType    String
+  lots          Int?
+  amount        Decimal?    @db.Decimal(20, 6)
+  currency      String      @default("rub")
+  confidence    Decimal?    @db.Decimal(5, 4)
+  rationale     String?
+  createdAt     DateTime    @default(now())
+  aiDecision    AiDecision  @relation(fields: [aiDecisionId], references: [id], onDelete: Cascade)
+  instrument    Instrument? @relation(fields: [instrumentId], references: [id], onDelete: SetNull)
+
+  @@index([aiDecisionId])
+  @@index([instrumentId])
+  @@index([actionType])
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  userId     String?
+  actorType  String
+  action     String
+  entityType String?
+  entityId   String?
+  metadata   Json?
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+  @@index([entityType, entityId])
+  @@index([action])
 }

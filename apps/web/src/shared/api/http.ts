@@ -8,13 +8,13 @@ function resolveApiBaseUrl() {
 
 export const apiClient = axios.create({
   baseURL: resolveApiBaseUrl(),
-  timeout: 90_000,
+  timeout: 300_000,
   withCredentials: true,
 });
 
 const authClient = axios.create({
   baseURL: resolveApiBaseUrl(),
-  timeout: 90_000,
+  timeout: 300_000,
   withCredentials: true,
 });
 

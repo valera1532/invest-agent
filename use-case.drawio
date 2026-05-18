@@ -1,88 +1,50 @@
 <mxfile host="Electron" agent="OpenCode" pages="1">
-  <diagram id="use-case-invest-agent" name="Use Case диаграмма">
-    <mxGraphModel dx="1900" dy="1100" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1700" pageHeight="1100" math="0" shadow="0">
+  <diagram id="use-case-invest-assistant" name="Use Case диаграмма">
+    <mxGraphModel dx="1900" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1150" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="boundary" value="Информационная система Invest Agent" style="swimlane;whiteSpace=wrap;html=1;rounded=0;strokeColor=#000000;fillColor=none;fontFamily=Times New Roman;fontSize=16;startSize=28;" vertex="1" parent="1">
-          <mxGeometry x="260" y="50" width="1120" height="980" as="geometry" />
+
+        <mxCell id="boundary" value="ИС &quot;Инвестиционный помощник&quot;" style="swimlane;whiteSpace=wrap;html=1;rounded=0;strokeColor=#000000;fillColor=none;fontFamily=Times New Roman;fontSize=17;startSize=32;" vertex="1" parent="1">
+          <mxGeometry x="300" y="70" width="1180" height="940" as="geometry" />
         </mxCell>
-        <mxCell id="actor-user" value="Пользователь" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontFamily=Times New Roman;fontSize=15;" vertex="1" parent="1">
-          <mxGeometry x="60" y="470" width="70" height="110" as="geometry" />
+
+        <mxCell id="actor-user" value="Пользователь" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontFamily=Times New Roman;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="80" y="500" width="80" height="120" as="geometry" />
         </mxCell>
-        <mxCell id="actor-tbank" value="T-Bank Invest API" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontFamily=Times New Roman;fontSize=15;" vertex="1" parent="1">
-          <mxGeometry x="1520" y="300" width="80" height="110" as="geometry" />
+        <mxCell id="actor-assistant" value="Аналитический помощник" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontFamily=Times New Roman;fontSize=16;" vertex="1" parent="1">
+          <mxGeometry x="1580" y="500" width="90" height="120" as="geometry" />
         </mxCell>
-        <mxCell id="actor-openai" value="OpenAI API" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontFamily=Times New Roman;fontSize=15;" vertex="1" parent="1">
-          <mxGeometry x="1520" y="720" width="80" height="110" as="geometry" />
+
+        <mxCell id="uc-request-analysis" value="Запрос анализа&lt;br&gt;инвестиционного портфеля" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="390" y="150" width="280" height="85" as="geometry" />
         </mxCell>
-        <mxCell id="uc-register" value="Регистрация" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=14;" vertex="1" parent="1">
-          <mxGeometry x="350" y="100" width="180" height="65" as="geometry" />
+        <mxCell id="uc-prepare-context" value="Подготовка данных&lt;br&gt;для анализа" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="800" y="150" width="260" height="85" as="geometry" />
         </mxCell>
-        <mxCell id="uc-login" value="Авторизация" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=14;" vertex="1" parent="1">
-          <mxGeometry x="350" y="210" width="180" height="65" as="geometry" />
+        <mxCell id="uc-analyze-portfolio" value="Анализ&lt;br&gt;инвестиционного портфеля" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="800" y="335" width="280" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="uc-token" value="Подключение T-Bank токена" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=14;" vertex="1" parent="1">
-          <mxGeometry x="750" y="150" width="220" height="75" as="geometry" />
+        <mxCell id="uc-form-recommendation" value="Формирование&lt;br&gt;инвестиционной рекомендации" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="800" y="520" width="310" height="90" as="geometry" />
         </mxCell>
-        <mxCell id="uc-quiz" value="Прохождение инвест-квиза" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=14;" vertex="1" parent="1">
-          <mxGeometry x="350" y="350" width="220" height="70" as="geometry" />
+        <mxCell id="uc-view-result" value="Просмотр результата&lt;br&gt;анализа" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="390" y="520" width="270" height="85" as="geometry" />
         </mxCell>
-        <mxCell id="uc-settings" value="Настройка инвест-профиля" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=14;" vertex="1" parent="1">
-          <mxGeometry x="760" y="350" width="220" height="70" as="geometry" />
+        <mxCell id="uc-history" value="Просмотр истории&lt;br&gt;рекомендаций" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="390" y="730" width="270" height="85" as="geometry" />
         </mxCell>
-        <mxCell id="uc-dashboard" value="Просмотр дашборда" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=14;" vertex="1" parent="1">
-          <mxGeometry x="350" y="520" width="200" height="65" as="geometry" />
+        <mxCell id="uc-approve" value="Подтверждение&lt;br&gt;рекомендации" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="800" y="730" width="270" height="85" as="geometry" />
         </mxCell>
-        <mxCell id="uc-portfolio" value="Просмотр портфеля" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=14;" vertex="1" parent="1">
-          <mxGeometry x="750" y="520" width="200" height="65" as="geometry" />
+        <mxCell id="uc-reject" value="Отклонение&lt;br&gt;рекомендации" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=15;" vertex="1" parent="1">
+          <mxGeometry x="1140" y="730" width="250" height="85" as="geometry" />
         </mxCell>
-        <mxCell id="uc-search" value="Поиск акций" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=14;" vertex="1" parent="1">
-          <mxGeometry x="1120" y="455" width="180" height="65" as="geometry" />
-        </mxCell>
-        <mxCell id="uc-buy" value="Покупка акции" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=14;" vertex="1" parent="1">
-          <mxGeometry x="1120" y="585" width="180" height="65" as="geometry" />
-        </mxCell>
-        <mxCell id="uc-ai" value="Формирование AI-рекомендации" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=14;" vertex="1" parent="1">
-          <mxGeometry x="350" y="755" width="240" height="75" as="geometry" />
-        </mxCell>
-        <mxCell id="uc-history" value="Просмотр истории AI-решений" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=14;" vertex="1" parent="1">
-          <mxGeometry x="735" y="750" width="240" height="75" as="geometry" />
-        </mxCell>
-        <mxCell id="uc-approve" value="Подтверждение AI-решения" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=14;" vertex="1" parent="1">
-          <mxGeometry x="350" y="910" width="230" height="70" as="geometry" />
-        </mxCell>
-        <mxCell id="uc-reject" value="Отклонение AI-решения" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=14;" vertex="1" parent="1">
-          <mxGeometry x="735" y="910" width="220" height="70" as="geometry" />
-        </mxCell>
-        <mxCell id="e-user-register" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="actor-user" target="uc-register">
+
+        <mxCell id="e-user-request" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="actor-user" target="uc-request-analysis">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-user-login" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="actor-user" target="uc-login">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e-user-token" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="actor-user" target="uc-token">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e-user-quiz" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="actor-user" target="uc-quiz">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e-user-settings" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="actor-user" target="uc-settings">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e-user-dashboard" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="actor-user" target="uc-dashboard">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e-user-portfolio" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="actor-user" target="uc-portfolio">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e-user-search" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="actor-user" target="uc-search">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e-user-buy" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="actor-user" target="uc-buy">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e-user-ai" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="actor-user" target="uc-ai">
+        <mxCell id="e-user-view" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="actor-user" target="uc-view-result">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="e-user-history" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="actor-user" target="uc-history">
@@ -94,31 +56,24 @@
         <mxCell id="e-user-reject" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="actor-user" target="uc-reject">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-tbank-token" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="actor-tbank" target="uc-token">
+
+        <mxCell id="e-assistant-analyze" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="actor-assistant" target="uc-analyze-portfolio">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-tbank-dashboard" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="actor-tbank" target="uc-dashboard">
+        <mxCell id="e-assistant-recommend" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="actor-assistant" target="uc-form-recommendation">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-tbank-portfolio" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="actor-tbank" target="uc-portfolio">
+
+        <mxCell id="include-request-context" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="endArrow=open;endFill=0;dashed=1;html=1;rounded=0;strokeColor=#000000;fontFamily=Times New Roman;fontSize=12;" edge="1" parent="1" source="uc-request-analysis" target="uc-prepare-context">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-tbank-search" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="actor-tbank" target="uc-search">
+        <mxCell id="include-context-analysis" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="endArrow=open;endFill=0;dashed=1;html=1;rounded=0;strokeColor=#000000;fontFamily=Times New Roman;fontSize=12;" edge="1" parent="1" source="uc-prepare-context" target="uc-analyze-portfolio">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-tbank-buy" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="actor-tbank" target="uc-buy">
+        <mxCell id="include-analysis-recommendation" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="endArrow=open;endFill=0;dashed=1;html=1;rounded=0;strokeColor=#000000;fontFamily=Times New Roman;fontSize=12;" edge="1" parent="1" source="uc-analyze-portfolio" target="uc-form-recommendation">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e-tbank-ai" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="actor-tbank" target="uc-ai">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e-tbank-approve" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="actor-tbank" target="uc-approve">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e-openai-ai" value="" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" edge="1" parent="1" source="actor-openai" target="uc-ai">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="include-approve-buy" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="endArrow=open;endFill=0;dashed=1;html=1;rounded=0;strokeColor=#000000;fontFamily=Times New Roman;fontSize=12;" edge="1" parent="1" source="uc-approve" target="uc-buy">
+        <mxCell id="include-view-recommendation" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;" style="endArrow=open;endFill=0;dashed=1;html=1;rounded=0;strokeColor=#000000;fontFamily=Times New Roman;fontSize=12;" edge="1" parent="1" source="uc-view-result" target="uc-form-recommendation">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
       </root>

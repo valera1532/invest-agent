@@ -1,0 +1,250 @@
+<mxfile host="Electron" agent="OpenCode">
+  <diagram id="class-diagram-invest-agent" name="Диаграмма классов">
+    <mxGraphModel dx="2934" dy="1790" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2600" pageHeight="1750" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;fontFamily=Times New Roman;fontSize=22;fontStyle=1;align=center;verticalAlign=middle;whiteSpace=wrap;" value="Диаграмма классов информационной системы Invest Agent" vertex="1">
+          <mxGeometry height="40" width="1000" x="800" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="auth-controller" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;AuthController&lt;/b&gt;&lt;hr&gt;+ registerController()&lt;br&gt;+ loginController()&lt;br&gt;+ refreshController()&lt;br&gt;+ logoutController()&lt;br&gt;+ meController()&lt;br&gt;+ connectTbankTokenController()&lt;br&gt;+ disconnectTbankTokenController()" vertex="1">
+          <mxGeometry height="170" width="280" x="40" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="market-controller" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;MarketController&lt;/b&gt;&lt;hr&gt;+ getDashboardOverviewController()&lt;br&gt;+ getPortfolioController()&lt;br&gt;+ getAccountsController()&lt;br&gt;+ getSharesController()&lt;br&gt;+ searchTradingSharesController()&lt;br&gt;+ buyShareController()" vertex="1">
+          <mxGeometry height="155" width="280" x="40" y="860" as="geometry" />
+        </mxCell>
+        <mxCell id="settings-controller" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;SettingsController&lt;/b&gt;&lt;hr&gt;+ getInvestorSettingsController()&lt;br&gt;+ updateInvestorSettingsController()" vertex="1">
+          <mxGeometry height="100" width="280" x="40" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="questionnaire-controller" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;InvestorQuestionnaireController&lt;/b&gt;&lt;hr&gt;+ getInvestorQuestionnaireController()&lt;br&gt;+ saveInvestorQuestionnaireController()" vertex="1">
+          <mxGeometry height="105" width="280" x="40" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="ai-controller" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;AiController&lt;/b&gt;&lt;hr&gt;+ createAiPreviewJobController()&lt;br&gt;+ getAiPreviewJobController()&lt;br&gt;+ listAiDecisionsController()&lt;br&gt;+ approveAiDecisionController()&lt;br&gt;+ rejectAiDecisionController()&lt;br&gt;+ executeAiDecisionController()" vertex="1">
+          <mxGeometry height="155" width="280" x="40" y="1220" as="geometry" />
+        </mxCell>
+        <mxCell id="auth-service" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;AuthService&lt;/b&gt;&lt;hr&gt;+ registerUser()&lt;br&gt;+ loginUser()&lt;br&gt;+ createRefreshSession()&lt;br&gt;+ rotateRefreshSession()&lt;br&gt;+ getCurrentUser()" vertex="1">
+          <mxGeometry height="140" width="270" x="390" y="135" as="geometry" />
+        </mxCell>
+        <mxCell id="tbank-service" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;TbankConnectionService&lt;/b&gt;&lt;hr&gt;+ validateTbankToken()&lt;br&gt;+ saveUserTbankToken()&lt;br&gt;+ removeUserTbankToken()&lt;br&gt;+ getUserTbankToken()" vertex="1">
+          <mxGeometry height="125" width="270" x="390" y="325" as="geometry" />
+        </mxCell>
+        <mxCell id="portfolio-service" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;PortfolioService&lt;/b&gt;&lt;hr&gt;+ getPortfolio()&lt;br&gt;+ savePortfolioSnapshot()" vertex="1">
+          <mxGeometry height="95" width="270" x="390" y="840" as="geometry" />
+        </mxCell>
+        <mxCell id="trading-service" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;TradingService&lt;/b&gt;&lt;hr&gt;+ searchSharesForTrading()&lt;br&gt;+ placeMarketOrder()&lt;br&gt;+ buyShare()&lt;br&gt;+ sellShare()" vertex="1">
+          <mxGeometry height="120" width="270" x="390" y="1010" as="geometry" />
+        </mxCell>
+        <mxCell id="settings-service" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;SettingsService&lt;/b&gt;&lt;hr&gt;+ getInvestorSettings()&lt;br&gt;+ updateInvestorSettings()" vertex="1">
+          <mxGeometry height="95" width="270" x="390" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="questionnaire-service" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;InvestorQuestionnaireService&lt;/b&gt;&lt;hr&gt;+ getInvestorQuestionnaire()&lt;br&gt;+ saveInvestorQuestionnaire()" vertex="1">
+          <mxGeometry height="95" width="270" x="390" y="660" as="geometry" />
+        </mxCell>
+        <mxCell id="ai-service" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;AiDecisionService&lt;/b&gt;&lt;hr&gt;+ previewAiDecision()&lt;br&gt;+ previewAiDecisionWithProgress()&lt;br&gt;+ buildMultiAssetUniverse()&lt;br&gt;+ createJsonChatCompletion()" vertex="1">
+          <mxGeometry height="125" width="270" x="390" y="1220" as="geometry" />
+        </mxCell>
+        <mxCell id="ai-records-service" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;AiDecisionRecordsService&lt;/b&gt;&lt;hr&gt;+ persistAiDecision()&lt;br&gt;+ listAiDecisions()&lt;br&gt;+ approveAiDecision()&lt;br&gt;+ rejectAiDecision()&lt;br&gt;+ executeAiDecision()" vertex="1">
+          <mxGeometry height="140" width="270" x="390" y="1400" as="geometry" />
+        </mxCell>
+        <mxCell id="user-model" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;User&lt;/b&gt;&lt;hr&gt;+ id: String&lt;br&gt;+ email: String&lt;br&gt;+ passwordHash: String&lt;br&gt;+ name: String&lt;br&gt;+ createdAt: DateTime&lt;br&gt;+ updatedAt: DateTime" vertex="1">
+          <mxGeometry height="145" width="290" x="780" y="140" as="geometry" />
+        </mxCell>
+        <mxCell id="session-model" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;Session&lt;/b&gt;&lt;hr&gt;+ id: String&lt;br&gt;+ userId: String&lt;br&gt;+ tokenHash: String&lt;br&gt;+ userAgent: String?&lt;br&gt;+ ipAddress: String?&lt;br&gt;+ expiresAt: DateTime&lt;br&gt;+ createdAt: DateTime&lt;br&gt;+ lastUsedAt: DateTime" vertex="1">
+          <mxGeometry height="170" width="290" x="1340" y="50" as="geometry" />
+        </mxCell>
+        <mxCell id="tbank-model" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;TbankConnection&lt;/b&gt;&lt;hr&gt;+ id: String&lt;br&gt;+ userId: String&lt;br&gt;+ tokenEncrypted: String&lt;br&gt;+ tokenMasked: String&lt;br&gt;+ isValid: Boolean&lt;br&gt;+ lastCheckedAt: DateTime?&lt;br&gt;+ createdAt: DateTime&lt;br&gt;+ updatedAt: DateTime" vertex="1">
+          <mxGeometry height="170" width="290" x="1480" y="302.5" as="geometry" />
+        </mxCell>
+        <mxCell id="profile-model" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;InvestorProfile&lt;/b&gt;&lt;hr&gt;+ id: String&lt;br&gt;+ userId: String&lt;br&gt;+ primaryGoal: String&lt;br&gt;+ riskProfile: RiskProfile&lt;br&gt;+ telegram: String?&lt;br&gt;+ dailyDigest: Boolean&lt;br&gt;+ executionMode: AiExecutionMode&lt;br&gt;+ aiReviewFrequency: AiReviewFrequency" vertex="1">
+          <mxGeometry height="170" width="290" x="1170" y="510" as="geometry" />
+        </mxCell>
+        <mxCell id="questionnaire-model" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;InvestorQuestionnaire&lt;/b&gt;&lt;hr&gt;+ id: String&lt;br&gt;+ userId: String&lt;br&gt;+ ageRange: AgeRange&lt;br&gt;+ experienceLevel: ExperienceLevel&lt;br&gt;+ investmentGoal: InvestmentGoal&lt;br&gt;+ investmentHorizon: InvestmentHorizon&lt;br&gt;+ liquidityNeed: LiquidityNeed&lt;br&gt;+ monthlyContribution: Int" vertex="1">
+          <mxGeometry height="170" width="290" x="1170" y="730" as="geometry" />
+        </mxCell>
+        <mxCell id="broker-account-model" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;BrokerAccount&lt;/b&gt;&lt;hr&gt;+ id: String&lt;br&gt;+ userId: String&lt;br&gt;+ externalAccountId: String&lt;br&gt;+ name: String?&lt;br&gt;+ type: String?&lt;br&gt;+ status: String?&lt;br&gt;+ openedAt: DateTime?&lt;br&gt;+ closedAt: DateTime?" vertex="1">
+          <mxGeometry height="170" width="290" x="1170" y="950" as="geometry" />
+        </mxCell>
+        <mxCell id="audit-model" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;AuditLog&lt;/b&gt;&lt;hr&gt;+ id: String&lt;br&gt;+ userId: String?&lt;br&gt;+ actorType: String&lt;br&gt;+ action: String&lt;br&gt;+ entityType: String?&lt;br&gt;+ entityId: String?&lt;br&gt;+ metadata: Json?&lt;br&gt;+ createdAt: DateTime" vertex="1">
+          <mxGeometry height="170" width="290" x="1170" y="1170" as="geometry" />
+        </mxCell>
+        <mxCell id="portfolio-snapshot-model" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;PortfolioSnapshot&lt;/b&gt;&lt;hr&gt;+ id: String&lt;br&gt;+ userId: String&lt;br&gt;+ brokerAccountId: String?&lt;br&gt;+ externalAccountId: String?&lt;br&gt;+ totalValue: Decimal?&lt;br&gt;+ cashValue: Decimal?&lt;br&gt;+ currency: String&lt;br&gt;+ capturedAt: DateTime" vertex="1">
+          <mxGeometry height="170" width="300" x="1540" y="940" as="geometry" />
+        </mxCell>
+        <mxCell id="portfolio-holding-model" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;PortfolioHolding&lt;/b&gt;&lt;hr&gt;+ id: String&lt;br&gt;+ snapshotId: String&lt;br&gt;+ instrumentId: String?&lt;br&gt;+ instrumentUid: String?&lt;br&gt;+ ticker: String?&lt;br&gt;+ name: String&lt;br&gt;+ quantity: Decimal&lt;br&gt;+ currentPrice: Decimal?" vertex="1">
+          <mxGeometry height="170" width="300" x="1880" y="940" as="geometry" />
+        </mxCell>
+        <mxCell id="instrument-model" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;Instrument&lt;/b&gt;&lt;hr&gt;+ id: String&lt;br&gt;+ instrumentUid: String&lt;br&gt;+ figi: String?&lt;br&gt;+ ticker: String&lt;br&gt;+ classCode: String?&lt;br&gt;+ name: String&lt;br&gt;+ type: String&lt;br&gt;+ currency: String&lt;br&gt;+ lot: Int?" vertex="1">
+          <mxGeometry height="185" width="300" x="1880" y="650" as="geometry" />
+        </mxCell>
+        <mxCell id="ai-decision-model" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;AiDecision&lt;/b&gt;&lt;hr&gt;+ id: String&lt;br&gt;+ userId: String&lt;br&gt;+ accountId: String?&lt;br&gt;+ riskProfile: RiskProfile&lt;br&gt;+ executionMode: AiExecutionMode&lt;br&gt;+ status: AiDecisionStatus&lt;br&gt;+ summary: String&lt;br&gt;+ portfolioView: Json&lt;br&gt;+ actions: Json&lt;br&gt;+ runtimeContext: Json" vertex="1">
+          <mxGeometry height="205" width="300" x="1540" y="1250" as="geometry" />
+        </mxCell>
+        <mxCell id="ai-action-model" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;AiDecisionAction&lt;/b&gt;&lt;hr&gt;+ id: String&lt;br&gt;+ aiDecisionId: String&lt;br&gt;+ instrumentId: String?&lt;br&gt;+ instrumentUid: String?&lt;br&gt;+ ticker: String?&lt;br&gt;+ actionType: String&lt;br&gt;+ lots: Int?&lt;br&gt;+ amount: Decimal?&lt;br&gt;+ confidence: Decimal?" vertex="1">
+          <mxGeometry height="185" width="300" x="1880" y="1200" as="geometry" />
+        </mxCell>
+        <mxCell id="trade-execution-model" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;TradeExecution&lt;/b&gt;&lt;hr&gt;+ id: String&lt;br&gt;+ aiDecisionId: String&lt;br&gt;+ userId: String&lt;br&gt;+ status: TradeExecutionStatus&lt;br&gt;+ actionType: String&lt;br&gt;+ instrumentId: String&lt;br&gt;+ accountId: String&lt;br&gt;+ lots: Int&lt;br&gt;+ brokerOrderId: String?" vertex="1">
+          <mxGeometry height="190" width="300" x="1880" y="1430" as="geometry" />
+        </mxCell>
+        <mxCell id="ai-preview-job-model" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;AiPreviewJob&lt;/b&gt;&lt;hr&gt;+ id: String&lt;br&gt;+ userId: String&lt;br&gt;+ accountId: String?&lt;br&gt;+ status: AiPreviewJobStatus&lt;br&gt;+ stage: String?&lt;br&gt;+ errorMessage: String?&lt;br&gt;+ decisionId: String?&lt;br&gt;+ startedAt: DateTime?&lt;br&gt;+ finishedAt: DateTime?" vertex="1">
+          <mxGeometry height="190" width="300" x="1540" y="1500" as="geometry" />
+        </mxCell>
+        <mxCell id="postgres" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;PostgreSQL&lt;/b&gt;&lt;hr&gt;+ provider: postgresql&lt;br&gt;+ Prisma Client" vertex="1">
+          <mxGeometry height="100" width="260" x="2260" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="tbank-api" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;T-Bank Invest API&lt;/b&gt;&lt;hr&gt;+ getAccounts()&lt;br&gt;+ getPortfolio()&lt;br&gt;+ getLastPrices()&lt;br&gt;+ postOrder()" vertex="1">
+          <mxGeometry height="130" width="260" x="2260" y="430" as="geometry" />
+        </mxCell>
+        <mxCell id="openai-api" parent="1" style="rounded=0;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=13;align=left;verticalAlign=top;spacing=8;" value="&lt;b&gt;OpenAI API&lt;/b&gt;&lt;hr&gt;+ chat.completions&lt;br&gt;+ json_object response" vertex="1">
+          <mxGeometry height="100" width="260" x="2260" y="760" as="geometry" />
+        </mxCell>
+        <mxCell id="e-auth-controller-service" edge="1" parent="1" source="auth-controller" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" target="auth-service" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-market-controller-portfolio" edge="1" parent="1" source="market-controller" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" target="portfolio-service" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-market-controller-trading" edge="1" parent="1" source="market-controller" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" target="trading-service" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-settings-controller-service" edge="1" parent="1" source="settings-controller" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" target="settings-service" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-questionnaire-controller-service" edge="1" parent="1" source="questionnaire-controller" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" target="questionnaire-service" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-ai-controller-service" edge="1" parent="1" source="ai-controller" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" target="ai-service" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-ai-controller-records" edge="1" parent="1" source="ai-controller" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" target="ai-records-service" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-auth-service-user" edge="1" parent="1" source="auth-service" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" target="user-model" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-tbank-service-tbank-model" edge="1" parent="1" source="tbank-service" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" target="tbank-model" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-portfolio-service-snapshot" edge="1" parent="1" source="portfolio-service" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" target="portfolio-snapshot-model" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="920" />
+              <mxPoint x="1500" y="920" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-trading-service-trade" edge="1" parent="1" source="trading-service" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" target="trade-execution-model" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="1640" />
+              <mxPoint x="1870" y="1640" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-settings-service-profile" edge="1" parent="1" source="settings-service" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" target="profile-model" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-questionnaire-service-model" edge="1" parent="1" source="questionnaire-service" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" target="questionnaire-model" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-ai-service-decision" edge="1" parent="1" source="ai-service" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" target="ai-decision-model" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="1370" />
+              <mxPoint x="1500" y="1370" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-ai-records-decision" edge="1" parent="1" source="ai-records-service" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;edgeStyle=orthogonalEdgeStyle;" target="ai-decision-model" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r-user-session" edge="1" parent="1" source="user-model" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;fontFamily=Times New Roman;fontSize=12;edgeStyle=orthogonalEdgeStyle;" target="session-model" value="1..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r-user-tbank" edge="1" parent="1" source="user-model" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;fontFamily=Times New Roman;fontSize=12;edgeStyle=orthogonalEdgeStyle;" target="tbank-model" value="1..1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r-user-profile" edge="1" parent="1" source="user-model" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;fontFamily=Times New Roman;fontSize=12;edgeStyle=orthogonalEdgeStyle;" target="profile-model" value="1..1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r-user-questionnaire" edge="1" parent="1" source="user-model" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;fontFamily=Times New Roman;fontSize=12;edgeStyle=orthogonalEdgeStyle;" target="questionnaire-model" value="1..1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r-user-broker" edge="1" parent="1" source="user-model" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;fontFamily=Times New Roman;fontSize=12;edgeStyle=orthogonalEdgeStyle;" target="broker-account-model" value="1..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r-user-audit" edge="1" parent="1" source="user-model" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;fontFamily=Times New Roman;fontSize=12;edgeStyle=orthogonalEdgeStyle;" target="audit-model" value="0..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r-user-snapshot" edge="1" parent="1" source="user-model" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;fontFamily=Times New Roman;fontSize=12;edgeStyle=orthogonalEdgeStyle;" target="portfolio-snapshot-model" value="1..*">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1110" y="1410" />
+              <mxPoint x="1540" y="1410" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="r-broker-snapshot" edge="1" parent="1" source="broker-account-model" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;fontFamily=Times New Roman;fontSize=12;edgeStyle=orthogonalEdgeStyle;" target="portfolio-snapshot-model" value="1..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r-snapshot-holding" edge="1" parent="1" source="portfolio-snapshot-model" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;fontFamily=Times New Roman;fontSize=12;edgeStyle=orthogonalEdgeStyle;" target="portfolio-holding-model" value="1..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r-instrument-holding" edge="1" parent="1" source="instrument-model" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;fontFamily=Times New Roman;fontSize=12;edgeStyle=orthogonalEdgeStyle;" target="portfolio-holding-model" value="1..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r-user-decision" edge="1" parent="1" source="user-model" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;fontFamily=Times New Roman;fontSize=12;edgeStyle=orthogonalEdgeStyle;" target="ai-decision-model" value="1..*">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1110" y="1470" />
+              <mxPoint x="1540" y="1470" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="r-decision-action" edge="1" parent="1" source="ai-decision-model" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;fontFamily=Times New Roman;fontSize=12;edgeStyle=orthogonalEdgeStyle;" target="ai-action-model" value="1..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r-instrument-action" edge="1" parent="1" source="instrument-model" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;fontFamily=Times New Roman;fontSize=12;edgeStyle=orthogonalEdgeStyle;" target="ai-action-model" value="1..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r-decision-trade" edge="1" parent="1" source="ai-decision-model" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;fontFamily=Times New Roman;fontSize=12;edgeStyle=orthogonalEdgeStyle;" target="trade-execution-model" value="1..*">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r-user-preview" edge="1" parent="1" source="user-model" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;fontFamily=Times New Roman;fontSize=12;edgeStyle=orthogonalEdgeStyle;" target="ai-preview-job-model" value="1..*">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1110" y="1660" />
+              <mxPoint x="1540" y="1660" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-services-postgres" edge="1" parent="1" source="user-model" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;dashed=1;edgeStyle=orthogonalEdgeStyle;" target="postgres" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-tbank-service-api" edge="1" parent="1" source="tbank-service" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;dashed=1;edgeStyle=orthogonalEdgeStyle;" target="tbank-api" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="260" />
+              <mxPoint x="2210" y="260" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-trading-service-api" edge="1" parent="1" source="trading-service" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;dashed=1;edgeStyle=orthogonalEdgeStyle;" target="tbank-api" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="1680" />
+              <mxPoint x="2210" y="1680" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e-ai-service-openai" edge="1" parent="1" source="ai-service" style="endArrow=open;html=1;rounded=0;strokeColor=#000000;dashed=1;edgeStyle=orthogonalEdgeStyle;" target="openai-api" value="">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="720" y="1700" />
+              <mxPoint x="2240" y="1700" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

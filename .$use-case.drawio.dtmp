@@ -1,0 +1,76 @@
+<mxfile host="Electron" agent="OpenCode">
+  <diagram id="use-case-invest-assistant" name="Use Case диаграмма">
+    <mxGraphModel dx="2054" dy="1253" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1800" pageHeight="1150" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="boundary" parent="1" style="swimlane;whiteSpace=wrap;html=1;rounded=0;strokeColor=#000000;fillColor=none;fontFamily=Times New Roman;fontSize=17;startSize=32;" value="ИС &quot;Инвестиционный помощник&quot;" vertex="1">
+          <mxGeometry height="940" width="1180" x="300" y="70" as="geometry" />
+        </mxCell>
+        <mxCell id="actor-user" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontFamily=Times New Roman;fontSize=16;" value="Пользователь" vertex="1">
+          <mxGeometry height="120" width="80" x="80" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="actor-assistant" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontFamily=Times New Roman;fontSize=16;" value="Аналитический планировщик" vertex="1">
+          <mxGeometry height="120" width="90" x="1580" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-request-analysis" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=15;" value="Запрос анализа&lt;br&gt;инвестиционного портфеля" vertex="1">
+          <mxGeometry height="85" width="280" x="390" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-prepare-context" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=15;" value="Подготовка данных&lt;br&gt;для анализа" vertex="1">
+          <mxGeometry height="85" width="260" x="800" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-analyze-portfolio" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=15;" value="Анализ&lt;br&gt;инвестиционного портфеля" vertex="1">
+          <mxGeometry height="90" width="280" x="800" y="335" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-form-recommendation" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=15;" value="Формирование&lt;br&gt;инвестиционной рекомендации" vertex="1">
+          <mxGeometry height="90" width="310" x="800" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-view-result" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=15;" value="Просмотр результата&lt;br&gt;анализа" vertex="1">
+          <mxGeometry height="85" width="270" x="390" y="520" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-history" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=15;" value="Просмотр истории&lt;br&gt;рекомендаций" vertex="1">
+          <mxGeometry height="85" width="270" x="390" y="730" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-approve" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=15;" value="Подтверждение&lt;br&gt;рекомендации" vertex="1">
+          <mxGeometry height="85" width="270" x="800" y="730" as="geometry" />
+        </mxCell>
+        <mxCell id="uc-reject" parent="1" style="ellipse;whiteSpace=wrap;html=1;strokeColor=#000000;fillColor=#ffffff;fontFamily=Times New Roman;fontSize=15;" value="Отклонение&lt;br&gt;рекомендации" vertex="1">
+          <mxGeometry height="85" width="250" x="1140" y="730" as="geometry" />
+        </mxCell>
+        <mxCell id="e-user-request" edge="1" parent="1" source="actor-user" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" target="uc-request-analysis" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-user-view" edge="1" parent="1" source="actor-user" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" target="uc-view-result" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-user-history" edge="1" parent="1" source="actor-user" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" target="uc-history" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-user-approve" edge="1" parent="1" source="actor-user" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" target="uc-approve" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-user-reject" edge="1" parent="1" source="actor-user" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" target="uc-reject" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-assistant-analyze" edge="1" parent="1" source="actor-assistant" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" target="uc-analyze-portfolio" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e-assistant-recommend" edge="1" parent="1" source="actor-assistant" style="endArrow=none;html=1;rounded=0;strokeColor=#000000;" target="uc-form-recommendation" value="">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="include-request-context" edge="1" parent="1" source="uc-request-analysis" style="endArrow=open;endFill=0;dashed=1;html=1;rounded=0;strokeColor=#000000;fontFamily=Times New Roman;fontSize=12;" target="uc-prepare-context" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="include-context-analysis" edge="1" parent="1" source="uc-prepare-context" style="endArrow=open;endFill=0;dashed=1;html=1;rounded=0;strokeColor=#000000;fontFamily=Times New Roman;fontSize=12;" target="uc-analyze-portfolio" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="include-analysis-recommendation" edge="1" parent="1" source="uc-analyze-portfolio" style="endArrow=open;endFill=0;dashed=1;html=1;rounded=0;strokeColor=#000000;fontFamily=Times New Roman;fontSize=12;" target="uc-form-recommendation" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="include-view-recommendation" edge="1" parent="1" source="uc-view-result" style="endArrow=open;endFill=0;dashed=1;html=1;rounded=0;strokeColor=#000000;fontFamily=Times New Roman;fontSize=12;" target="uc-form-recommendation" value="&amp;lt;&amp;lt;include&amp;gt;&amp;gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

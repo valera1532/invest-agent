@@ -94,7 +94,17 @@ export function ConnectTokenPage() {
             }}
           >
             <div className="space-y-2">
-              <Label htmlFor="tbank-token">T-Bank token</Label>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <Label htmlFor="tbank-token">T-Bank token</Label>
+                <a
+                  href="https://www.tbank.ru/invest/settings/api/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="text-sm font-medium text-[#11795f] underline-offset-4 hover:underline"
+                >
+                  Где взять токен?
+                </a>
+              </div>
               <Input
                 id="tbank-token"
                 type="password"
@@ -103,6 +113,10 @@ export function ConnectTokenPage() {
                 placeholder="Вставь свой read-only или full-access токен"
                 required
               />
+              <p className="text-sm leading-6 text-[#60716a]">
+                Открой страницу настроек T-Bank Invest API, выпусти токен и
+                вставь его сюда.
+              </p>
             </div>
             <div className="flex flex-wrap gap-3">
               <Button

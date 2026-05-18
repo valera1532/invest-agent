@@ -14,6 +14,7 @@ import {
   Home,
   LogOut,
   PanelLeft,
+  PieChart,
   Settings2,
   Wallet,
 } from "lucide-react";
@@ -38,6 +39,11 @@ const pageMeta: Record<string, { title: string; subtitle: string }> = {
     title: "Портфель",
     subtitle:
       "Реальные позиции, остатки и распределение по всем доступным счетам.",
+  },
+  "/app/analysis": {
+    title: "Анализ",
+    subtitle:
+      "Диаграммы распределения портфеля по классам активов и секторам экономики.",
   },
   "/app/ai": {
     title: "AI-аналитик",
@@ -83,6 +89,7 @@ export function AppShell() {
       { href: "/app/overview", label: "Обзор", icon: Home },
       { href: "/app/stocks", label: "Акции", icon: BarChart3 },
       { href: "/app/portfolio", label: "Портфель", icon: Wallet },
+      { href: "/app/analysis", label: "Анализ", icon: PieChart },
       { href: "/app/ai", label: "AI", icon: Bot },
       { href: "/app/settings", label: "Настройки", icon: Settings2 },
     ],

@@ -10,6 +10,7 @@ import { GuestOnly } from "@/features/auth/components/guest-only";
 import { ProtectedApp } from "@/features/auth/components/protected-app";
 import { AuthLoginPage } from "@/pages/auth-login-page";
 import { AuthRegisterPage } from "@/pages/auth-register-page";
+import { AnalysisPage } from "@/pages/analysis-page";
 import { ConnectTokenPage } from "@/pages/connect-token-page";
 import { DashboardPage } from "@/pages/dashboard-page";
 import { AiPage } from "@/pages/ai-page";
@@ -100,6 +101,12 @@ const portfolioRoute = createRoute({
   component: PortfolioPage,
 });
 
+const analysisRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: "analysis",
+  component: AnalysisPage,
+});
+
 const investorQuizRoute = createRoute({
   getParentRoute: () => appRoute,
   path: "investor-quiz",
@@ -128,6 +135,7 @@ const routeTree = rootRoute.addChildren([
     marketsRoute,
     stocksRoute,
     portfolioRoute,
+    analysisRoute,
     investorQuizRoute,
     aiRoute,
     settingsRoute,

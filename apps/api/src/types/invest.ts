@@ -47,13 +47,27 @@ export type PositionRow = {
   lastPriceTime?: string;
   currentValue?: number;
   instrumentType?: string;
+  sector?: string;
   accountId?: string;
   accountName?: string;
+};
+
+export type PortfolioTotalsDto = {
+  totalPortfolio: number;
+  shares: number;
+  bonds: number;
+  etf: number;
+  currencies: number;
+  futures: number;
+  options: number;
+  structuredProducts: number;
+  other: number;
 };
 
 export type PortfolioDto = {
   accountId: string;
   accounts: AccountRow[];
+  totals: PortfolioTotalsDto;
   cash: CashRow[];
   positions: PositionRow[];
 };
